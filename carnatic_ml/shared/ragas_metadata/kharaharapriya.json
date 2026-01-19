@@ -1,0 +1,79 @@
+{
+  "id": "kharaharapriya",
+  "name": "Kharaharapriya",
+  "alternate_names": [],
+  "is_melakarta": true,
+  "melakarta_number": "22",
+  "arohanam": [
+    "S",
+    "R2",
+    "G2",
+    "M1",
+    "P",
+    "D2",
+    "N2",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N2",
+    "D2",
+    "P",
+    "M1",
+    "G2",
+    "R2",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:02:38",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:25:52",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "M1",
+    "samvadi_swara": "S",
+    "jeeva_swaras": [
+      "S",
+      "G2",
+      "N2",
+      "M1"
+    ],
+    "nyasa_swaras": [
+      "S",
+      "P"
+    ],
+    "graha_swara": "S",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R1",
+      "R3",
+      "G1",
+      "G3",
+      "M2",
+      "D1",
+      "D3",
+      "N1",
+      "N3"
+    ],
+    "vakra_swaras": [
+      "S",
+      "N2"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "evening",
+    "rasa": "adbhuta",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "kharaharapriya",
+    "number": "22",
+    "chakra": "Veda",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

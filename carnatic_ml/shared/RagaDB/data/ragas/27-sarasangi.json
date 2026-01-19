@@ -1,0 +1,90 @@
+{
+    "ragas": {
+        "id": 27,
+        "name": "Sarasangi"
+    },
+    "arohanas": [
+        {
+            "raga_id": 27,
+            "swara_id": 1,
+            "order": 0
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 3,
+            "order": 1
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 7,
+            "order": 2
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 8,
+            "order": 3
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 10,
+            "order": 4
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 11,
+            "order": 5
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 16,
+            "order": 6
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 17,
+            "order": 7
+        }
+    ],
+    "avarohanas": [
+        {
+            "raga_id": 27,
+            "swara_id": 17,
+            "order": -1
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 16,
+            "order": 0
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 11,
+            "order": 1
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 10,
+            "order": 2
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 8,
+            "order": 3
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 7,
+            "order": 4
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 3,
+            "order": 5
+        },
+        {
+            "raga_id": 27,
+            "swara_id": 1,
+            "order": 6
+        }
+    ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "maruvalalita",
+  "name": "mAruvalalita",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "arohanam": [
+    "P",
+    "D3",
+    "N3",
+    "S",
+    "R1",
+    "G1",
+    "M2",
+    "P"
+  ],
+  "avarohanam": [
+    "P",
+    "M2",
+    "G1",
+    "R1",
+    "S",
+    "N3",
+    "P"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:25:59",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:25:59",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R2",
+      "R3",
+      "G2",
+      "G3",
+      "M1",
+      "D1",
+      "D2",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

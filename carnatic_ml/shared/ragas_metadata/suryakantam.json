@@ -1,0 +1,57 @@
+{
+  "id": "suryakantam",
+  "name": "Suryakantam",
+  "alternate_names": [],
+  "is_melakarta": true,
+  "melakarta_number": "17",
+  "arohanam": [],
+  "avarohanam": [],
+  "metadata": {
+    "created_on": "2025-04-20 22:02:38",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:02:38",
+    "source": "melakarta system"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "S",
+      "R1",
+      "R2",
+      "R3",
+      "G1",
+      "G2",
+      "G3",
+      "M1",
+      "M2",
+      "P",
+      "D1",
+      "D2",
+      "D3",
+      "N1",
+      "N2",
+      "N3"
+    ],
+    "vakra_swaras": []
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "krama",
+    "arohana_type": "",
+    "avarohana_type": "",
+    "swara_count": 1
+  },
+  "melakartha": {
+    "parent_name": "suryakantam",
+    "number": "17",
+    "chakra": "Agni",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

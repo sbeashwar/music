@@ -1,0 +1,81 @@
+{
+  "id": "kalyani",
+  "name": "Kalyani",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "parent_melakarta": "",
+  "arohanam": [
+    "S",
+    "R2",
+    "G3",
+    "M2",
+    "P",
+    "D2",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "D2",
+    "P",
+    "M2",
+    "G3",
+    "R2",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:02:38",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:26:07",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "P",
+    "samvadi_swara": "S",
+    "jeeva_swaras": [
+      "G3",
+      "N3",
+      "M2",
+      "P",
+      "S"
+    ],
+    "nyasa_swaras": [
+      "S",
+      "P"
+    ],
+    "graha_swara": "S",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R1",
+      "R3",
+      "G1",
+      "G2",
+      "M1",
+      "D1",
+      "D3",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "night",
+    "rasa": "shringara",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

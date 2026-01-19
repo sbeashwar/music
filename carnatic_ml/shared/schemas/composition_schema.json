@@ -1,0 +1,42 @@
+{
+  "id": "",
+  "title": "",
+  "raga_id": "",
+  "talam_id": "",
+  "composer": {
+    "name": "",
+    "period": "",
+    "tradition": ""
+  },
+  "form": "",
+  "language": "",
+  "tempo": {
+    "kala_pramana": "",
+    "bpm": 0
+  },
+  "lyrics": {
+    "sahityam": "",
+    "meaning": ""
+  },
+  "performance": {
+    "sections": [],
+    "phrases": {
+      "prayogas": [],
+      "pakads": [],
+      "chalan": [],
+      "sanchara": [],
+      "murcchanas": []
+    },
+    "gamakas": []
+  },
+  "midi_file": "",
+  "audio_file": "",
+  "metadata": {
+    "created_on": "",
+    "created_by": "",
+    "last_modified": "",
+    "source": "",
+    "duration_seconds": 0,
+    "notes_count": 0
+  }
+}

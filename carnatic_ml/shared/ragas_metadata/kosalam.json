@@ -1,0 +1,71 @@
+{
+  "id": "kosalam",
+  "name": "Kosalam",
+  "alternate_names": [],
+  "is_melakarta": true,
+  "melakarta_number": "71",
+  "arohanam": [
+    "S",
+    "R3",
+    "G3",
+    "M2",
+    "P",
+    "D2",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "D2",
+    "P",
+    "M2",
+    "G3",
+    "R3",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:02:38",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:26:09",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R1",
+      "R2",
+      "G1",
+      "G2",
+      "M1",
+      "D1",
+      "D3",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "kosalam",
+    "number": "71",
+    "chakra": "Aditya",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "id": "pranavapriya",
+  "name": "praNavapriyA",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "arohanam": [
+    "S",
+    "R2",
+    "M2",
+    "P",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "P",
+    "M2",
+    "G2",
+    "R2",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:26:04",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:26:04",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R1",
+      "R3",
+      "G1",
+      "G3",
+      "M1",
+      "D1",
+      "D2",
+      "D3",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "shadava",
+    "avarohana_type": "shadava",
+    "swara_count": 6
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

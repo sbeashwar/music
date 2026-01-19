@@ -1,0 +1,78 @@
+{
+  "id": "shree",
+  "name": "Shree",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "parent_melakarta": "",
+  "arohanam": [
+    "S",
+    "G3",
+    "M1",
+    "P",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "P",
+    "M1",
+    "G3",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:02:38",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:02:38",
+    "source": "manual addition"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "M1",
+    "samvadi_swara": "S",
+    "jeeva_swaras": [
+      "S",
+      "N3",
+      "M1",
+      "G3"
+    ],
+    "nyasa_swaras": [
+      "S",
+      "P"
+    ],
+    "graha_swara": "S",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R1",
+      "R2",
+      "R3",
+      "G1",
+      "G2",
+      "M2",
+      "D1",
+      "D2",
+      "D3",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "Evening",
+    "rasa": "Serious, majestic",
+    "type": "vakra",
+    "arohana_type": "audava",
+    "avarohana_type": "audava",
+    "swara_count": 5
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

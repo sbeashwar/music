@@ -1,0 +1,38 @@
+{
+  "id": "",
+  "name": "",
+  "alternate_names": [],
+  "arohanam": [],
+  "avarohanam": [],
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [],
+    "vakra_swaras": []
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "",
+    "arohana_type": "",
+    "avarohana_type": "",
+    "swara_count": 0
+  },
+  "metadata": {
+    "created_on": "",
+    "created_by": "",
+    "last_modified": "",
+    "source": ""
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "samasvaravali",
+  "name": "sAmasvarAvaLi",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "arohanam": [
+    "S",
+    "R1",
+    "G2",
+    "M2",
+    "P",
+    "N1",
+    "D1",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "D1",
+    "P",
+    "D1",
+    "M2",
+    "G2",
+    "R1",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:25:59",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:25:59",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R2",
+      "R3",
+      "G1",
+      "G3",
+      "M1",
+      "D2",
+      "D3",
+      "N2",
+      "N3"
+    ],
+    "vakra_swaras": [
+      "D1",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

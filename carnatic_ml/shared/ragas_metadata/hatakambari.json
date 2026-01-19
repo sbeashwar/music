@@ -1,0 +1,79 @@
+{
+  "id": "hatakambari",
+  "name": "Hatakambari",
+  "alternate_names": [],
+  "is_melakarta": true,
+  "melakarta_number": "18",
+  "arohanam": [
+    "S",
+    "R1",
+    "G3",
+    "M1",
+    "P",
+    "D3",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "D3",
+    "P",
+    "M1",
+    "G3",
+    "R1",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:02:38",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:25:51",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "M1",
+    "samvadi_swara": "S",
+    "jeeva_swaras": [
+      "S",
+      "N3",
+      "M1",
+      "G3"
+    ],
+    "nyasa_swaras": [
+      "S",
+      "P"
+    ],
+    "graha_swara": "S",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R2",
+      "R3",
+      "G1",
+      "G2",
+      "M2",
+      "D1",
+      "D2",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "hatakambari",
+    "number": "18",
+    "chakra": "Agni",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "id": "bhogavardhani",
+  "name": "bhOgavardhani",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "arohanam": [
+    "S",
+    "R1",
+    "G1",
+    "M2",
+    "D1",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "D1",
+    "M2",
+    "G1",
+    "R1",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:25:58",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:25:58",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R2",
+      "R3",
+      "G2",
+      "G3",
+      "M1",
+      "P",
+      "D2",
+      "D3",
+      "N1",
+      "N2",
+      "N3"
+    ],
+    "vakra_swaras": [
+      "S",
+      "D1"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "audava",
+    "avarohana_type": "audava",
+    "swara_count": 5
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

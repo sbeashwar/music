@@ -1,0 +1,69 @@
+{
+  "id": "sanjh",
+  "name": "sAnjh",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "arohanam": [
+    "S",
+    "G3",
+    "M2",
+    "D2",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "D2",
+    "M2",
+    "G3",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:26:08",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:26:08",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R1",
+      "R2",
+      "R3",
+      "G1",
+      "G2",
+      "M1",
+      "P",
+      "D1",
+      "D3",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "audava",
+    "avarohana_type": "audava",
+    "swara_count": 5
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}

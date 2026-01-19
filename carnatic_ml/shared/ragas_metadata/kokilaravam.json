@@ -1,0 +1,73 @@
+{
+  "id": "kokilaravam",
+  "name": "kOkilAravam",
+  "alternate_names": [],
+  "is_melakarta": false,
+  "melakarta_number": "",
+  "arohanam": [
+    "S",
+    "R1",
+    "G2",
+    "R1",
+    "M1",
+    "P",
+    "D2",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "D2",
+    "P",
+    "M1",
+    "G2",
+    "R1",
+    "S"
+  ],
+  "metadata": {
+    "created_on": "2025-04-20 22:25:50",
+    "created_by": "sbeas",
+    "last_modified": "2025-04-20 22:25:50",
+    "source": "ragalist.txt"
+  },
+  "raga_lakshana": {
+    "vadi_swara": "",
+    "samvadi_swara": "",
+    "jeeva_swaras": [],
+    "nyasa_swaras": [],
+    "graha_swara": "",
+    "amsa_swara": "",
+    "varjya_swaras": [
+      "R2",
+      "R3",
+      "G1",
+      "G3",
+      "M2",
+      "D1",
+      "D3",
+      "N1",
+      "N2"
+    ],
+    "vakra_swaras": [
+      "N3",
+      "S",
+      "R1"
+    ]
+  },
+  "raga_classification": {
+    "time_of_day": "",
+    "rasa": "",
+    "type": "vakra",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
+  },
+  "melakartha": {
+    "parent_name": "",
+    "number": "",
+    "chakra": "",
+    "purvanga": "",
+    "uttaranga": ""
+  }
+}
