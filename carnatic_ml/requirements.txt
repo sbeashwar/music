@@ -1,23 +1,20 @@
 # Core dependencies
 numpy>=1.19.0
-pandas>=1.2.0
-librosa>=0.8.0
-soundfile>=0.10.3
-matplotlib>=3.3.0
+librosa>=0.8.0        # Audio analysis for raga detection
+pretty_midi>=0.2.9    # MIDI generation
+soundfile>=0.10.3     # Audio file I/O
 
-# Machine Learning
-tensorflow>=2.4.0
-torch>=1.7.0
-scikit-learn>=0.24.0
+# Optional: ML enhancements (not required for basic functionality)
+# tensorflow>=2.4.0   # For neural network models
+# torch>=1.7.0        # Alternative ML backend
+# scikit-learn>=0.24.0
 
-# Audio processing
-pydub>=0.24.1
-python-rtmidi>=1.4.0
+# Audio processing utilities
+pydub>=0.24.1         # Audio format conversion
 
 # Utilities
 tqdm>=4.50.0
-python-dotenv>=0.15.0
 
-# Web interface (for future use)
-flask>=1.1.2
-flask-cors>=3.0.10
+# Web interface (optional, for future use)
+# flask>=1.1.2
+# flask-cors>=3.0.10

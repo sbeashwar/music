@@ -218,11 +218,11 @@ class RagaGenerator:
         swara_map = {
             'S': 0,
             'R1': 1, 'R2': 2, 'R3': 3,
-            'G1': 1, 'G2': 3, 'G3': 4,
+            'G1': 2, 'G2': 3, 'G3': 4,   # G1=R2, G2=R3 (enharmonic equivalents)
             'M1': 5, 'M2': 6,
             'P': 7,
             'D1': 8, 'D2': 9, 'D3': 10,
-            'N1': 8, 'N2': 10, 'N3': 11,
+            'N1': 9, 'N2': 10, 'N3': 11,  # N1=D2, N2=D3 (enharmonic equivalents)
         }
 
         base = int(tonic_midi)

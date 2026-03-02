@@ -61,9 +61,19 @@ def generate_for_raga(raga_name, duration_seconds, out_path, temperature=0.8):
     return out_path
 
 
+def main(raga_name='mohanam', duration=8, temperature=0.8):
+    """
+    Main entry point for demo - can be called programmatically or from CLI.
+    """
+    out = os.path.join(os.path.dirname(__file__), f"{raga_name}_demo_{int(time.time())}.mid")
+    path = generate_for_raga(raga_name, duration, out, temperature=temperature)
+    print('Done:', path)
+    return path
+
+
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
-    p.add_argument('raga', help='Raga name to generate (e.g. mohanam)')
+    p.add_argument('raga', nargs='?', default='mohanam', help='Raga name to generate (e.g. mohanam)')
     p.add_argument('--duration', type=int, default=8, help='Desired duration in seconds (approx)')
     p.add_argument('--out', default=None, help='Output MIDI path')
     p.add_argument('--temperature', type=float, default=0.8)

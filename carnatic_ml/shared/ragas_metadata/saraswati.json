@@ -5,8 +5,23 @@
   "is_melakarta": false,
   "melakarta_number": "",
   "parent_melakarta": "",
-  "arohanam": [],
-  "avarohanam": [],
+  "arohanam": [
+    "S",
+    "R2",
+    "M2",
+    "P",
+    "D2",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N2",
+    "D2",
+    "P",
+    "M2",
+    "R2",
+    "S"
+  ],
   "metadata": {
     "created_on": "2025-04-20 22:02:38",
     "created_by": "sbeas",

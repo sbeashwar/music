@@ -5,9 +5,9 @@
   "is_melakarta": false,
   "melakarta_number": "",
   "arohanam": [
-    "N3",
     "S",
     "R1",
+    "G1",
     "M2",
     "P",
     "D3",
@@ -18,10 +18,6 @@
     "M2",
     "G1",
     "R1",
-    "S",
-    "N3",
-    "S",
-    "N3",
     "S"
   ],
   "metadata": {

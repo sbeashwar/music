@@ -8,7 +8,6 @@
     "S",
     "G3",
     "M1",
-    "D2",
     "P",
     "D2",
     "N2",
@@ -17,10 +16,7 @@
   "avarohanam": [
     "S",
     "N2",
-    "D2",
-    "M1",
-    "G3",
-    "R2",
+    "P",
     "M1",
     "G3",
     "S"
@@ -40,6 +36,7 @@
     "amsa_swara": "",
     "varjya_swaras": [
       "R1",
+      "R2",
       "R3",
       "G1",
       "G2",
@@ -49,25 +46,20 @@
       "N1",
       "N3"
     ],
-    "vakra_swaras": [
-      "P",
-      "S",
-      "N2",
-      "M1"
-    ]
+    "vakra_swaras": []
   },
   "raga_classification": {
     "time_of_day": "",
     "rasa": "",
-    "type": "vakra",
-    "arohana_type": "sampurna",
-    "avarohana_type": "sampurna",
-    "swara_count": 7
+    "type": "janya",
+    "arohana_type": "shadava",
+    "avarohana_type": "audava",
+    "swara_count": 6
   },
   "melakartha": {
-    "parent_name": "",
-    "number": "",
-    "chakra": "",
+    "parent_name": "Kharaharapriya",
+    "number": "22",
+    "chakra": "Veda",
     "purvanga": "",
     "uttaranga": ""
   }

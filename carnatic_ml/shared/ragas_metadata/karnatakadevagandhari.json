@@ -5,20 +5,22 @@
   "is_melakarta": false,
   "melakarta_number": "",
   "arohanam": [
-    "N3",
     "S",
-    "G2",
+    "G3",
     "M1",
     "P",
-    "D1"
+    "N2",
+    "S"
   ],
   "avarohanam": [
+    "S",
+    "N2",
+    "D2",
     "P",
     "M1",
-    "G2",
+    "G3",
     "R2",
-    "S",
-    "N3"
+    "S"
   ],
   "metadata": {
     "created_on": "2025-04-20 22:25:52",

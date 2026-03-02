@@ -5,22 +5,24 @@
   "is_melakarta": false,
   "melakarta_number": "",
   "arohanam": [
-    "N2",
     "S",
     "R2",
     "G2",
     "M1",
     "P",
-    "D1",
+    "D2",
     "N2",
     "S"
   ],
   "avarohanam": [
     "S",
     "N2",
-    "D1",
+    "D2",
     "P",
     "M1",
+    "P",
+    "M1",
+    "P",
     "G2",
     "R2",
     "S"

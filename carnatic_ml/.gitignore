@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Generated output files
+output/*.wav
+output/*.mid
+output/test_scales/
+
+# Recordings (user-specific, large)
+recording/
+
+# Models (binary, large)
+carnatic/models/
+raga_detection/models/
+raga_generation/models/
+*.pkl
+*.joblib
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Misc
+*.pdf
+karnatik_comparison.json

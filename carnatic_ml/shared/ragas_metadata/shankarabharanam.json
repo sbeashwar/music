@@ -2,8 +2,8 @@
   "id": "shankarabharanam",
   "name": "shankarAbharaNam",
   "alternate_names": [],
-  "is_melakarta": false,
-  "melakarta_number": "",
+  "is_melakarta": true,
+  "melakarta_number": 29,
   "arohanam": [
     "S",
     "R2",
@@ -67,10 +67,10 @@
     "swara_count": 7
   },
   "melakartha": {
-    "parent_name": "",
-    "number": "",
-    "chakra": "",
-    "purvanga": "",
-    "uttaranga": ""
+    "parent_name": "shankarAbharaNam",
+    "number": 29,
+    "chakra": "Rishi",
+    "purvanga": "R2 G3",
+    "uttaranga": "D2 N3"
   }
 }

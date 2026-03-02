@@ -6,22 +6,22 @@
   "melakarta_number": "",
   "arohanam": [
     "S",
+    "N3",
+    "S",
     "R2",
     "G3",
     "M1",
     "P",
-    "D2",
-    "N2",
-    "S"
+    "D2"
   ],
   "avarohanam": [
-    "S",
-    "N2",
     "D2",
     "P",
     "M1",
     "G3",
     "R2",
+    "S",
+    "N3",
     "S"
   ],
   "metadata": {
