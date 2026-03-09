@@ -50,10 +50,13 @@ SEMITONE_TO_SWARA = {
 
 # Context-aware disambiguation for enharmonic pairs
 # Key: semitone, Value: dict mapping neighbor context to specific swara
+# IMPORTANT: Rules must be conservative.  For semi-9 and semi-10 the
+# correct swara depends on the raga (D2 vs N1, N2 vs D3) so we only
+# apply rules when the context gives very strong evidence.  Otherwise
+# use the statistically more common default.
 ENHARMONIC_DISAMBIGUATION = {
     2: {  # R2 vs G1
         'default': 'R2',
-        # If preceded by R1, it's more likely R2; if followed by G2, likely G1
         'after_1': 'R2', 'before_3': 'G1', 'before_4': 'R2',
     },
     3: {  # R3 vs G2
@@ -62,11 +65,14 @@ ENHARMONIC_DISAMBIGUATION = {
     },
     9: {  # D2 vs N1
         'default': 'D2',
-        'after_8': 'D2', 'before_10': 'N1', 'before_11': 'D2',
+        'after_8': 'D2', 'before_11': 'D2',
+        # NOTE: before_10 removed — semi 9→10 could be D2→N2 or N1→D3,
+        # cannot disambiguate without knowing the raga.
     },
     10: {  # D3 vs N2
         'default': 'N2',
-        'after_9': 'D3', 'after_8': 'D3', 'before_11': 'N2',
+        'after_8': 'D3', 'before_11': 'N2',
+        # NOTE: after_9 removed — semi 9→10 is ambiguous (see above).
     },
 }
 
@@ -119,11 +125,12 @@ class ArohanamDetector:
         self.voice_mode = voice_mode
         
         if voice_mode:
-            # Voice has gamakas, slides, vibrato — need longer minimum notes
-            # and higher confidence to filter out transitional sounds
-            self.min_note_duration = max(min_note_duration, 0.20)
-            self.min_confidence = max(min_confidence, 0.6)
-            self.pitch_tolerance = max(pitch_tolerance, 0.6)
+            # Voice has gamakas, slides, vibrato — need slightly longer
+            # minimum notes and higher confidence, but not so aggressive
+            # that real swaras get dropped (e.g., brief notes in avarohanam)
+            self.min_note_duration = max(min_note_duration, 0.12)
+            self.min_confidence = max(min_confidence, 0.55)
+            self.pitch_tolerance = max(pitch_tolerance, 0.5)
         else:
             self.min_note_duration = min_note_duration
             self.min_confidence = min_confidence
@@ -177,6 +184,13 @@ class ArohanamDetector:
         if self.voice_mode and len(notes) > 2:
             notes = self._filter_transitional_notes(notes)
             notes = self._consolidate_rare_neighbors(notes)
+        
+        # Step 4c: Reconcile borderline semitones — if a pitch sits close to
+        # the boundary between two semitones and the same semitone appears
+        # more clearly elsewhere, merge the borderline note.
+        # Only applied in voice mode where gamaka slides cause this issue.
+        if self.voice_mode and len(notes) > 2:
+            notes = self._reconcile_borderline_notes(notes)
         
         # Step 5: Disambiguate enharmonic equivalents
         notes = self._disambiguate_enharmonics(notes)
@@ -369,6 +383,66 @@ class ArohanamDetector:
         
         return [n for n in notes if (n.semitone % 12) not in remove_semitones]
     
+    def _reconcile_borderline_notes(
+        self, notes: List[DetectedNote]
+    ) -> List[DetectedNote]:
+        """
+        Fix borderline semitone assignments (voice mode only).
+        
+        Very conservative: only merge semitone X into X±1 when EVERY note
+        assigned to X has a raw pitch that is closer to X±1 than to X.
+        This catches genuine misquantisation from gamaka approach slides
+        without merging legitimately different swaras.
+        """
+        if len(notes) < 3:
+            return notes
+        
+        from collections import defaultdict
+        
+        # Find tonic frequency from S notes
+        s_notes = [n for n in notes if n.semitone == 0]
+        tonic_f = s_notes[0].frequency if s_notes else notes[0].frequency
+        if tonic_f <= 0:
+            return notes
+        
+        # Group notes by semitone with their raw continuous-semitone value
+        semi_raw: Dict[int, List[float]] = defaultdict(list)
+        for n in notes:
+            if n.frequency > 0:
+                raw = (12.0 * np.log2(n.frequency / tonic_f)) % 12
+                semi_raw[n.semitone].append(raw)
+        
+        merge_map: Dict[int, int] = {}
+        present = sorted(semi_raw.keys())
+        
+        for i in range(len(present) - 1):
+            s_lo = present[i]
+            s_hi = present[i + 1]
+            if s_hi - s_lo != 1:
+                continue
+            
+            boundary = s_lo + 0.5
+            lo_vals = semi_raw[s_lo]
+            hi_vals = semi_raw[s_hi]
+            
+            # Merge lo→hi only if ALL lo notes are past the boundary
+            if lo_vals and all(v > boundary for v in lo_vals):
+                merge_map[s_lo] = s_hi
+            # Merge hi→lo only if ALL hi notes are below the boundary
+            elif hi_vals and all(v < boundary for v in hi_vals):
+                merge_map[s_hi] = s_lo
+        
+        if not merge_map:
+            return notes
+        
+        for n in notes:
+            if n.semitone in merge_map:
+                new_semi = merge_map[n.semitone]
+                n.semitone = new_semi
+                n.swara = SEMITONE_TO_SWARA.get(new_semi, n.swara)
+        
+        return notes
+    
     def _segment_notes(
         self, 
         semitone_track: np.ndarray, 
@@ -451,7 +525,16 @@ class ArohanamDetector:
         tonic_hz: float, frame_duration: float,
     ) -> DetectedNote:
         """Create a DetectedNote from frame data."""
-        median_semi = np.median(pitches)
+        # Trim leading/trailing 20% of frames to reduce gamaka/slide
+        # artifacts that skew the semitone estimate.  The stable centre
+        # of a held swara gives the best pitch reading.
+        n = len(pitches)
+        if n >= 5:
+            trim = max(1, int(n * 0.20))
+            stable_pitches = pitches[trim:-trim] if trim < n // 2 else pitches
+        else:
+            stable_pitches = pitches
+        median_semi = np.median(stable_pitches)
         semitone = int(round(median_semi)) % 12
         
         # Handle negative semitones (below tonic) 

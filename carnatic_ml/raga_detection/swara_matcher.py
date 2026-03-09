@@ -654,6 +654,24 @@ class SwaraSequenceMatcher:
         raw_sequence: Optional[List[str]] = None,
     ) -> List[RagaMatch]:
         """
+        Hierarchical raga matching following Carnatic music theory.
+        Delegates to _match_hierarchical_core and adds fuzzy retry if
+        the top score is low (indicating possible pitch detection errors).
+        """
+        return self._match_hierarchical_core(
+            detected_swaras, direction, max_results, min_score, raw_sequence,
+            allow_fuzzy=True)
+    
+    def _match_hierarchical_core(
+        self,
+        detected_swaras: List[str],
+        direction: str = 'ascending',
+        max_results: int = 20,
+        min_score: float = 0.3,
+        raw_sequence: Optional[List[str]] = None,
+        allow_fuzzy: bool = False,
+    ) -> List[RagaMatch]:
+        """
         Hierarchical raga matching following Carnatic music theory:
         
         1. Match detected swaras to closest melakarta (weighted by occurrence)
@@ -714,10 +732,11 @@ class SwaraSequenceMatcher:
             return self.match_swaras(
                 detected_swaras, direction, max_results, min_score, raw_sequence)
         
-        # Log top melakartas for debugging
-        top3 = [(MELAKARTA_72[m][0], m, f"{s:.0%}")
-                for m, s in top_melakartas[:3]]
-        print(f"  Top melakartas: {top3}")
+        # Log top melakartas for debugging (only from the outer call)
+        if allow_fuzzy:
+            top3 = [(MELAKARTA_72[m][0], m, f"{s:.0%}")
+                    for m, s in top_melakartas[:3]]
+            print(f"  Top melakartas: {top3}")
         
         # Step 3: Gather and score candidate ragas from top families
         asc_semis, desc_semis = self._split_asc_desc(raw_sequence)
@@ -756,11 +775,30 @@ class SwaraSequenceMatcher:
                 
                 # Coverage: fraction of detected weight in this raga
                 matched_weight = sum(semi_counts.get(s, 0) for s in matched)
-                coverage = matched_weight / total_weight
+                
+                # --- Gamaka tolerance ---
+                # Extra swaras that are ±1 semitone from a matched raga
+                # swara are likely gamaka artifacts (pitch oscillation).
+                # Discount their weight so they don't penalise the score
+                # as harshly as truly foreign swaras.
+                gamaka_adj = {xs for xs in extra
+                              if any(abs(xs - ms) in (1, 11)
+                                     for ms in matched | {0, 7})}
+                gamaka_wt = sum(semi_counts.get(s, 0) for s in gamaka_adj)
+                regular_extra_wt = sum(semi_counts.get(s, 0)
+                                       for s in (extra - gamaka_adj))
+                
+                # Effective total discounts gamaka-adjacent extras by 80 %
+                eff_total = total_weight - gamaka_wt * 0.80
+                if eff_total < 1:
+                    eff_total = 1
+                
+                coverage = matched_weight / eff_total
                 
                 # Penalty for detected swaras NOT in the raga
-                extra_weight = sum(semi_counts.get(s, 0) for s in extra)
-                extra_penalty = (extra_weight / total_weight) * 0.30
+                # Gamaka-adjacent extras penalised at 20 % of their weight
+                adj_extra_wt = regular_extra_wt + gamaka_wt * 0.20
+                extra_penalty = (adj_extra_wt / eff_total) * 0.30
                 
                 # Penalty for raga swaras we didn't detect
                 miss_penalty = len(missing) * 0.06
@@ -847,7 +885,132 @@ class SwaraSequenceMatcher:
                 ))
         
         results.sort(key=lambda m: (-m.score, m.raga_name))
-        return results[:max_results]
+        top_results = results[:max_results]
+        
+        # === Fuzzy retry ===
+        # If the best score is weak, some detected swaras may be ±1 semitone
+        # off due to vocal intonation.  Try swapping each "rare" detected
+        # swara to its ±1 neighbor and re-matching.
+        if allow_fuzzy and top_results and top_results[0].score < 1.0 and raw_sequence:
+            fuzzy_results = self._fuzzy_retry(
+                detected_swaras, direction, raw_sequence,
+                semi_counts, top_results[0].score)
+            if fuzzy_results:
+                combined = {m.raga_id: m for m in top_results}
+                for m in fuzzy_results:
+                    if m.raga_id not in combined or m.score > combined[m.raga_id].score:
+                        combined[m.raga_id] = m
+                top_results = sorted(combined.values(),
+                                     key=lambda m: (-m.score, m.raga_name))[:max_results]
+        
+        return top_results
+    
+    def _fuzzy_retry(
+        self,
+        detected_swaras: List[str],
+        direction: str,
+        raw_sequence: List[str],
+        semi_counts: Dict[int, float],
+        best_score: float,
+    ) -> List[RagaMatch]:
+        """
+        Try alternative swara sets by shifting low-confidence semitones ±1.
+        
+        For each detected swara with a low raw-sequence count, generate
+        variants where that swara is replaced by ±1 semitone or dropped.
+        Also tries *pair* combinations (two weak swaras changed at once)
+        to handle cases where multiple notes are borderline.
+        """
+        from itertools import combinations
+
+        swaras = self._normalize_swaras(detected_swaras)
+        inner = [s for s in swaras if s != 'S']
+        if not inner:
+            return []
+        
+        # Find "weak" swaras — those with low occurrence count.
+        total = sum(semi_counts.values())
+        weak_swaras = []
+        for s in inner:
+            semi = SWARA_TO_SEMITONE[s]
+            if semi in (0, 7):  # Sa and Pa are never wrong
+                continue
+            cnt = semi_counts.get(semi, 0)
+            if cnt <= total * 0.15:
+                weak_swaras.append(s)
+        
+        if not weak_swaras:
+            return []
+        
+        # Sort by count (weakest first), limit to 4 to bound combinatorics
+        weak_swaras.sort(key=lambda s: semi_counts.get(SWARA_TO_SEMITONE[s], 0))
+        weak_swaras = weak_swaras[:4]
+        
+        def _options_for(swara):
+            """Return list of actions: ('replace', new_name) or ('drop', None)."""
+            semi = SWARA_TO_SEMITONE[swara]
+            opts = [('drop', None)]
+            for delta in (-1, 1):
+                alt_semi = (semi + delta) % 12
+                alt_list = SEMITONE_TO_SWARAS.get(alt_semi)
+                if alt_list:
+                    opts.append(('replace', alt_list[0]))
+            return opts
+        
+        def _apply(base, changes):
+            """Apply a dict {swara: action} to the base list."""
+            result = []
+            for s in base:
+                if s in changes:
+                    action, rep = changes[s]
+                    if action == 'drop':
+                        continue
+                    result.append(rep)
+                else:
+                    result.append(s)
+            # Deduplicate while preserving order
+            seen = set()
+            deduped = []
+            for s in result:
+                if s not in seen:
+                    seen.add(s)
+                    deduped.append(s)
+            return deduped
+        
+        # Build all variant swara sets (single + pair changes)
+        original = tuple(swaras)
+        variants = set()
+        
+        # Single-swara changes
+        for w in weak_swaras:
+            for action, rep in _options_for(w):
+                v = tuple(_apply(swaras, {w: (action, rep)}))
+                if v != original:
+                    variants.add(v)
+        
+        # Pair-swara changes (combinations of 2 weak swaras)
+        if len(weak_swaras) >= 2:
+            for w1, w2 in combinations(weak_swaras, 2):
+                for a1, r1 in _options_for(w1):
+                    for a2, r2 in _options_for(w2):
+                        v = tuple(_apply(swaras, {
+                            w1: (a1, r1), w2: (a2, r2)}))
+                        if v != original:
+                            variants.add(v)
+        
+        # Score each variant
+        all_results = []
+        threshold = best_score - 0.05  # accept variants within 0.05 of best
+        for variant in variants:
+            results = self._match_hierarchical_core(
+                list(variant), direction, 5, 0.3, raw_sequence)
+            for m in results:
+                if m.score > threshold:
+                    m.score -= 0.01  # small penalty for fuzzy
+                    m.details = f"(fuzzy) {m.details}"
+                    all_results.append(m)
+        
+        return all_results
     
     def _sequence_order_score(
         self,
