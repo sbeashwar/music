@@ -6,6 +6,9 @@ dist/
 build/
 *.egg
 
+# Raga cache
+.raga_cache.pkl
+
 # Generated output files
 output/*.wav
 output/*.mid

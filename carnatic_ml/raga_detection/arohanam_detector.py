@@ -176,6 +176,7 @@ class ArohanamDetector:
         # Step 4b: Filter short transitional notes (voice mode)
         if self.voice_mode and len(notes) > 2:
             notes = self._filter_transitional_notes(notes)
+            notes = self._consolidate_rare_neighbors(notes)
         
         # Step 5: Disambiguate enharmonic equivalents
         notes = self._disambiguate_enharmonics(notes)
@@ -329,6 +330,44 @@ class ArohanamDetector:
         
         filtered.append(notes[-1])  # Always keep last
         return filtered
+    
+    def _consolidate_rare_neighbors(
+        self, notes: List[DetectedNote]
+    ) -> List[DetectedNote]:
+        """
+        Remove rare notes that are ±1 semitone from a much more frequent note.
+        
+        Voice slides sometimes overshoot the target note, creating brief
+        appearances of adjacent swaras (e.g., sliding from M2 to R2 briefly
+        hits R1). If a semitone appears far less often than its neighbor,
+        it's almost certainly a slide artifact, not an intended swara.
+        """
+        from collections import Counter
+        
+        if len(notes) <= 2:
+            return notes
+        
+        # Count occurrences of each semitone (mod 12)
+        semi_counts = Counter(n.semitone % 12 for n in notes)
+        
+        # Identify semitones to remove: those with count < 25% of an adjacent semitone
+        remove_semitones = set()
+        for semi, count in semi_counts.items():
+            for neighbor in [(semi - 1) % 12, (semi + 1) % 12]:
+                if neighbor in semi_counts:
+                    neighbor_count = semi_counts[neighbor]
+                    if count <= 1 and neighbor_count >= 3:
+                        # This semitone is rare and has a very common neighbor
+                        remove_semitones.add(semi)
+                        break
+                    elif neighbor_count > 0 and count / neighbor_count < 0.25:
+                        remove_semitones.add(semi)
+                        break
+        
+        if not remove_semitones:
+            return notes
+        
+        return [n for n in notes if (n.semitone % 12) not in remove_semitones]
     
     def _segment_notes(
         self, 

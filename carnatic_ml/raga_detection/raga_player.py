@@ -236,9 +236,11 @@ def generate_audio_wave(
     
     # Arohanam (ascending)
     prev_semi = -1
-    for swara in arohanam:
+    for i, swara in enumerate(arohanam):
         semi = SWARA_TO_SEMITONE.get(swara, 0)
-        octave_up = (semi <= prev_semi and prev_semi >= 0 and swara != arohanam[0])
+        # Upper Sa: last note of arohanam if it's 'S' should be octave up
+        is_upper_sa = (swara == 'S' and i == len(arohanam) - 1 and i > 0)
+        octave_up = is_upper_sa or (semi <= prev_semi and prev_semi >= 0 and swara != arohanam[0])
         freq = swara_to_freq(swara, tonic_hz, octave_up=octave_up)
         audio_parts.append(generate_note(freq, note_duration, sample_rate))
         prev_semi = semi if not octave_up else semi + 12

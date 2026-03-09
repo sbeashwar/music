@@ -94,7 +94,7 @@ class RagaGUI:
     def _create_detect_tab(self):
         tab = self.detect_tab
         tab.columnconfigure(0, weight=1)
-        tab.rowconfigure(5, weight=1)   # results row
+        tab.rowconfigure(6, weight=1)   # results row
 
         # Title
         ttk.Label(
@@ -139,8 +139,7 @@ class RagaGUI:
 
         # -- Source mode --
         mode_frame = ttk.LabelFrame(tab, text="Audio Source", padding=8)
-        mode_frame.grid(row=2, column=0, sticky="ew", pady=(0, 8))
-        # (shift file_frame to row=1.5 isn't possible, so re-order after)
+        mode_frame.grid(row=3, column=0, sticky="ew", pady=(0, 8))
 
         self.source_var = tk.StringVar(value="voice")
         ttk.Radiobutton(mode_frame, text="Voice / Singing", variable=self.source_var, value="voice").grid(row=0, column=0, padx=(0, 15))
@@ -151,11 +150,11 @@ class RagaGUI:
         self.detect_btn = ttk.Button(
             tab, text="Detect Raga", command=self._run_detection, state="disabled"
         )
-        self.detect_btn.grid(row=4, column=0, pady=8)
+        self.detect_btn.grid(row=5, column=0, pady=8)
 
         # -- Results --
         results_frame = ttk.LabelFrame(tab, text="Results", padding=8)
-        results_frame.grid(row=5, column=0, sticky="nsew")
+        results_frame.grid(row=6, column=0, sticky="nsew")
         results_frame.columnconfigure(0, weight=1)
         results_frame.rowconfigure(0, weight=1)
 
@@ -374,13 +373,18 @@ class RagaGUI:
     def _on_rec_done(self):
         self.is_recording = False
         self.record_btn.configure(text="Record 30s")
-        self.record_status.configure(text="Done!", foreground="green")
         self.record_progress['value'] = self.record_seconds
         self.save_btn.configure(state="normal")
         self._update_detect_button()
         dur = len(self.recorded_audio) / 22050
+
+        # Auto-save the recording
+        saved_path = self._auto_save_recording()
+        save_msg = f"\nAuto-saved to: {saved_path}" if saved_path else ""
+        self.record_status.configure(text=f"Saved!", foreground="green")
+
         self._set_detect_text(
-            f"Recording complete! ({dur:.1f}s)\n\n"
+            f"Recording complete! ({dur:.1f}s){save_msg}\n\n"
             "Click 'Detect Raga' to analyze."
         )
 
@@ -396,6 +400,23 @@ class RagaGUI:
         self.record_status.configure(text="Error", foreground="red")
         self._set_detect_text(f"Recording error:\n\n{error}")
 
+    def _auto_save_recording(self) -> str:
+        """Auto-save recording to recording/ directory. Returns saved path or empty string."""
+        if self.recorded_audio is None:
+            return ""
+        try:
+            from datetime import datetime
+            rec_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'recording')
+            os.makedirs(rec_dir, exist_ok=True)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            path = os.path.join(rec_dir, f"recording_{ts}.wav")
+            import soundfile as sf
+            sf.write(path, self.recorded_audio, 22050)
+            self.audio_path = path
+            return path
+        except Exception:
+            return ""
+
     def _save_recording(self):
         if self.recorded_audio is None:
             return
@@ -408,9 +429,8 @@ class RagaGUI:
         )
         if path:
             try:
-                import scipy.io.wavfile as wav
-                audio_int16 = (self.recorded_audio * 32767).astype(np.int16)
-                wav.write(path, 22050, audio_int16)
+                import soundfile as sf
+                sf.write(path, self.recorded_audio, 22050)
                 self.record_status.configure(text="Saved!", foreground="green")
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to save: {e}")
@@ -466,7 +486,7 @@ class RagaGUI:
                 else:
                     result = detector.detect_from_file(audio_path)
 
-                matches = matcher.match_swaras(
+                matches = matcher.match_swaras_hierarchical(
                     result.detected_swaras,
                     direction=result.direction,
                     max_results=20,

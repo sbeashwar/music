@@ -7,6 +7,10 @@ find matching ragas from the database by comparing arohanam/avarohanam patterns.
 
 import os
 import json
+import math
+import pickle
+import hashlib
+from collections import Counter
 from typing import List, Dict, Optional, Tuple, Set
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -29,6 +33,105 @@ for swara, semi in SWARA_TO_SEMITONE.items():
     if semi not in SEMITONE_TO_SWARAS:
         SEMITONE_TO_SWARAS[semi] = []
     SEMITONE_TO_SWARAS[semi].append(swara)
+
+
+# ── Canonical 72 Melakarta ragas (Wikipedia / Govindacharya scheme) ──
+# Each: (number, name, arohanam_semitones)
+# All are sampurna: 7 unique swaras, same ascending & descending, include S and P.
+# Semitone tuple: (R, G, M, D, N) — S=0 and P=7 are always present.
+MELAKARTA_72 = {
+    # Chakra 1: Indu (R1 G1 M1)
+    1:  ('Kanakāngi',           (1, 2, 5, 8, 9)),
+    2:  ('Ratnāngi',            (1, 2, 5, 8, 10)),
+    3:  ('Gānamūrti',           (1, 2, 5, 8, 11)),
+    4:  ('Vanaspati',           (1, 2, 5, 9, 10)),
+    5:  ('Mānavati',            (1, 2, 5, 9, 11)),
+    6:  ('Tānarūpi',           (1, 2, 5, 10, 11)),
+    # Chakra 2: Netra (R1 G2 M1)
+    7:  ('Senāvati',            (1, 3, 5, 8, 9)),
+    8:  ('Hanumatodi',          (1, 3, 5, 8, 10)),
+    9:  ('Dhenukā',             (1, 3, 5, 8, 11)),
+    10: ('Nātakapriyā',         (1, 3, 5, 9, 10)),
+    11: ('Kokilapriyā',         (1, 3, 5, 9, 11)),
+    12: ('Rūpavati',            (1, 3, 5, 10, 11)),
+    # Chakra 3: Agni (R1 G3 M1)
+    13: ('Gāyakapriyā',         (1, 4, 5, 8, 9)),
+    14: ('Vakulābharanam',       (1, 4, 5, 8, 10)),
+    15: ('Māyāmālavagowla',     (1, 4, 5, 8, 11)),
+    16: ('Chakravākam',          (1, 4, 5, 9, 10)),
+    17: ('Sūryakāntam',         (1, 4, 5, 9, 11)),
+    18: ('Hātakāmbari',          (1, 4, 5, 10, 11)),
+    # Chakra 4: Veda (R2 G2 M1)
+    19: ('Jhankāradhvani',       (2, 3, 5, 8, 9)),
+    20: ('Natabhairavi',         (2, 3, 5, 8, 10)),
+    21: ('Kīravāni',            (2, 3, 5, 8, 11)),
+    22: ('Kharaharapriyā',       (2, 3, 5, 9, 10)),
+    23: ('Gourimanohari',        (2, 3, 5, 9, 11)),
+    24: ('Varunapriyā',          (2, 3, 5, 10, 11)),
+    # Chakra 5: Bana (R2 G3 M1)
+    25: ('Māraranjani',          (2, 4, 5, 8, 9)),
+    26: ('Chārukesi',            (2, 4, 5, 8, 10)),
+    27: ('Sarasāngi',            (2, 4, 5, 8, 11)),
+    28: ('Harikāmbhoji',         (2, 4, 5, 9, 10)),
+    29: ('Dhīrasankarābharanam', (2, 4, 5, 9, 11)),
+    30: ('Nāganandini',          (2, 4, 5, 10, 11)),
+    # Chakra 6: Rutu (R3 G3 M1)
+    31: ('Yāgapriyā',           (3, 4, 5, 8, 9)),
+    32: ('Rāgavardhini',        (3, 4, 5, 8, 10)),
+    33: ('Gāngeyabhushani',     (3, 4, 5, 8, 11)),
+    34: ('Vāgadhīsvari',        (3, 4, 5, 9, 10)),
+    35: ('Shūlini',             (3, 4, 5, 9, 11)),
+    36: ('Chalanāta',            (3, 4, 5, 10, 11)),
+    # Chakra 7: Rishi (R1 G1 M2)
+    37: ('Sālagam',             (1, 2, 6, 8, 9)),
+    38: ('Jalārnavam',           (1, 2, 6, 8, 10)),
+    39: ('Jhālavarāli',         (1, 2, 6, 8, 11)),
+    40: ('Navanītam',            (1, 2, 6, 9, 10)),
+    41: ('Pāvani',              (1, 2, 6, 9, 11)),
+    42: ('Raghupriyā',           (1, 2, 6, 10, 11)),
+    # Chakra 8: Vasu (R1 G2 M2)
+    43: ('Gavāmbhodi',           (1, 3, 6, 8, 9)),
+    44: ('Bhavapriyā',           (1, 3, 6, 8, 10)),
+    45: ('Shubhapantuvarāli',    (1, 3, 6, 8, 11)),
+    46: ('Shadvidamārgini',      (1, 3, 6, 9, 10)),
+    47: ('Suvarnāngi',           (1, 3, 6, 9, 11)),
+    48: ('Divyamani',            (1, 3, 6, 10, 11)),
+    # Chakra 9: Brahma (R1 G3 M2)
+    49: ('Dhavalāmbari',         (1, 4, 6, 8, 9)),
+    50: ('Nāmanārāyani',         (1, 4, 6, 8, 10)),
+    51: ('Kāmavardhini',         (1, 4, 6, 8, 11)),
+    52: ('Rāmapriyā',            (1, 4, 6, 9, 10)),
+    53: ('Gamanāshrama',          (1, 4, 6, 9, 11)),
+    54: ('Vishvambari',           (1, 4, 6, 10, 11)),
+    # Chakra 10: Disi (R2 G2 M2)
+    55: ('Shāmalāngi',           (2, 3, 6, 8, 9)),
+    56: ('Shanmukhapriyā',       (2, 3, 6, 8, 10)),
+    57: ('Simhendramadhyamam',   (2, 3, 6, 8, 11)),
+    58: ('Hemavati',             (2, 3, 6, 9, 10)),
+    59: ('Dharmavati',           (2, 3, 6, 9, 11)),
+    60: ('Nītimati',             (2, 3, 6, 10, 11)),
+    # Chakra 11: Rudra (R2 G3 M2)
+    61: ('Kāntāmani',           (2, 4, 6, 8, 9)),
+    62: ('Rishabhapriyā',        (2, 4, 6, 8, 10)),
+    63: ('Latāngi',              (2, 4, 6, 8, 11)),
+    64: ('Vāchaspati',           (2, 4, 6, 9, 10)),
+    65: ('Mechakalyāni',         (2, 4, 6, 9, 11)),
+    66: ('Chitrāmbari',          (2, 4, 6, 10, 11)),
+    # Chakra 12: Aditya (R3 G3 M2)
+    67: ('Sucharitra',           (3, 4, 6, 8, 9)),
+    68: ('Jyotisvarūpini',      (3, 4, 6, 8, 10)),
+    69: ('Dhātuvardhani',       (3, 4, 6, 8, 11)),
+    70: ('Nāsikābhūshani',     (3, 4, 6, 9, 10)),
+    71: ('Kōsalam',             (3, 4, 6, 9, 11)),
+    72: ('Rasikapriyā',         (3, 4, 6, 10, 11)),
+}
+
+# Build reverse lookup: frozenset of all 7 semitones (incl S=0, P=7) → melakarta number
+_MELAKARTA_BY_SEMITONES: Dict[frozenset, int] = {}
+for _num, (_name, _rgdn) in MELAKARTA_72.items():
+    _full = frozenset((0, _rgdn[0], _rgdn[1], _rgdn[2], 7, _rgdn[3], _rgdn[4]))
+    _MELAKARTA_BY_SEMITONES[_full] = _num
+
 
 # All 16 swaras (without octave variants)
 ALL_SWARAS = list(SWARA_TO_SEMITONE.keys())
@@ -96,6 +199,7 @@ class SwaraSequenceMatcher:
         
         self.metadata_dir = metadata_dir
         self.ragas: Dict[str, RagaEntry] = {}
+        self.popularity: Dict[str, int] = {}  # raga_id -> composition count
         
         # Indices for fast lookup
         self._by_arohanam_key: Dict[str, List[str]] = {}  # frozenset key -> raga_ids
@@ -103,12 +207,98 @@ class SwaraSequenceMatcher:
         self._by_semitone_set: Dict[tuple, List[str]] = {} # sorted semitones -> raga_ids
         
         self._load_ragas()
+        self._load_popularity()
+    
+    def _load_popularity(self):
+        """Load raga popularity data (composition counts from karnatik.com)."""
+        pop_path = Path(__file__).parent / 'raga_popularity.json'
+        if pop_path.exists():
+            try:
+                with open(pop_path, 'r', encoding='utf-8') as f:
+                    self.popularity = json.load(f)
+                print(f"SwaraSequenceMatcher: Loaded popularity for {len(self.popularity)} ragas")
+            except Exception:
+                self.popularity = {}
+    
+    def _popularity_score(self, raga_id: str) -> float:
+        """Return a normalized popularity bonus (0.0 to ~0.05).
+        
+        Top ragas (~200+ compositions) get the full bonus.
+        Unknown ragas get 0.
+        """
+        count = self.popularity.get(raga_id, 0)
+        if count == 0:
+            return 0.0
+        # Log scale: log(count)/log(max_count) * 0.05
+        # Rough: 200+ → 0.05, 50 → 0.04, 10 → 0.03, 1 → 0.01
+        return min(0.05, math.log1p(count) / math.log1p(300) * 0.05)
+    
+    def _get_cache_path(self) -> Path:
+        """Get path for the compiled raga cache file."""
+        return Path(self.metadata_dir) / '.raga_cache.pkl'
+    
+    def _compute_dir_fingerprint(self) -> str:
+        """Compute a fingerprint of the metadata directory for cache invalidation.
+        
+        Uses file count + total size + newest mtime as a fast proxy.
+        """
+        json_files = sorted(f for f in os.listdir(self.metadata_dir) if f.endswith('.json'))
+        if not json_files:
+            return 'empty'
+        
+        total_size = 0
+        newest_mtime = 0.0
+        for f in json_files:
+            st = os.stat(os.path.join(self.metadata_dir, f))
+            total_size += st.st_size
+            newest_mtime = max(newest_mtime, st.st_mtime)
+        
+        key = f"{len(json_files)}:{total_size}:{newest_mtime:.6f}"
+        return hashlib.md5(key.encode()).hexdigest()
     
     def _load_ragas(self):
-        """Load all raga definitions from metadata directory."""
+        """Load all raga definitions, using a cache file when available."""
         if not os.path.exists(self.metadata_dir):
             raise FileNotFoundError(f"Metadata directory not found: {self.metadata_dir}")
         
+        cache_path = self._get_cache_path()
+        fingerprint = self._compute_dir_fingerprint()
+        
+        # Try loading from cache
+        if cache_path.exists():
+            try:
+                with open(cache_path, 'rb') as f:
+                    cached = pickle.load(f)
+                if cached.get('fingerprint') == fingerprint:
+                    self.ragas = cached['ragas']
+                    self._by_arohanam_key = cached['by_arohanam_key']
+                    self._by_swara_count = cached['by_swara_count']
+                    self._by_semitone_set = cached['by_semitone_set']
+                    print(f"SwaraSequenceMatcher: Loaded {len(self.ragas)} ragas from cache")
+                    return
+            except Exception:
+                pass  # Cache corrupt or incompatible, rebuild
+        
+        # Full load from individual JSON files
+        self._load_ragas_from_json()
+        
+        # Save cache for next time
+        try:
+            cached = {
+                'fingerprint': fingerprint,
+                'ragas': self.ragas,
+                'by_arohanam_key': self._by_arohanam_key,
+                'by_swara_count': self._by_swara_count,
+                'by_semitone_set': self._by_semitone_set,
+            }
+            with open(cache_path, 'wb') as f:
+                pickle.dump(cached, f, protocol=pickle.HIGHEST_PROTOCOL)
+            print(f"SwaraSequenceMatcher: Saved cache to {cache_path}")
+        except Exception as e:
+            print(f"SwaraSequenceMatcher: Could not save cache: {e}")
+    
+    def _load_ragas_from_json(self):
+        """Load all raga definitions from individual JSON files."""
         loaded = 0
         skipped = 0
         
@@ -372,6 +562,291 @@ class SwaraSequenceMatcher:
         # Sort by score descending, then by name
         results.sort(key=lambda m: (-m.score, m.raga_name))
         
+        return results[:max_results]
+    
+    # ── Hierarchical matching (melakarta-first) ─────────────────────
+    
+    def _count_semitones(
+        self,
+        raw_sequence: Optional[List[str]],
+        inner_swaras: List[str],
+    ) -> Counter:
+        """Build weighted semitone occurrence counts.
+        
+        Uses raw_sequence (with repeats) when available, otherwise
+        treats each swara in inner_swaras as count = 1.
+        Only counts variable swaras (excludes Sa = 0 and Pa = 7).
+        """
+        counts: Counter = Counter()
+        if raw_sequence:
+            for s in raw_sequence:
+                s_upper = s.strip().upper()
+                if s_upper in SWARA_TO_SEMITONE:
+                    semi = SWARA_TO_SEMITONE[s_upper]
+                    if semi not in (0, 7):
+                        counts[semi] += 1
+        else:
+            for s in inner_swaras:
+                semi = SWARA_TO_SEMITONE.get(s, -1)
+                if semi > 0 and semi != 7:
+                    counts[semi] += 1
+        return counts
+    
+    def _rank_melakartas(self, semi_counts: Counter) -> List[Tuple[int, float]]:
+        """Score and rank the 72 canonical melakartas against detected swaras.
+        
+        Score = fraction of detected-swara *weight* covered by the melakarta.
+        
+        Before scoring, semitones that appear only once while a ±1 neighbor
+        appears ≥3× more are treated as slide artifacts and down-weighted.
+        
+        Returns:
+            List of (melakarta_number, score) sorted by score descending.
+        """
+        # De-noise: down-weight semitones that are likely slide artifacts
+        cleaned = Counter(semi_counts)
+        for semi in list(semi_counts.keys()):
+            cnt = semi_counts[semi]
+            if cnt > 1:
+                continue
+            for delta in (-1, 1):
+                nbr = semi + delta
+                if nbr in semi_counts and semi_counts[nbr] >= cnt * 3:
+                    # Very likely a slide artifact — remove from scoring
+                    del cleaned[semi]
+                    break
+        
+        total_weight = sum(cleaned.values())
+        if total_weight == 0:
+            return []
+        
+        rankings = []
+        for mnum, (mname, m_semis) in MELAKARTA_72.items():
+            m_set = set(m_semis)
+            covered = sum(cnt for semi, cnt in cleaned.items()
+                         if semi in m_set)
+            score = covered / total_weight
+            rankings.append((mnum, score))
+        
+        rankings.sort(key=lambda x: -x[1])
+        return rankings
+    
+    def _is_vakra(self, raga: RagaEntry) -> bool:
+        """Check if a raga has vakra (zigzag) arohanam or avarohanam."""
+        aro = raga.arohanam_semitones
+        if len(aro) >= 2:
+            for i in range(1, len(aro)):
+                if aro[i] <= aro[i - 1]:
+                    return True
+        ava = raga.avarohanam_semitones
+        if len(ava) >= 2:
+            for i in range(1, len(ava)):
+                if ava[i] >= ava[i - 1]:
+                    return True
+        return False
+    
+    def match_swaras_hierarchical(
+        self,
+        detected_swaras: List[str],
+        direction: str = 'ascending',
+        max_results: int = 20,
+        min_score: float = 0.3,
+        raw_sequence: Optional[List[str]] = None,
+    ) -> List[RagaMatch]:
+        """
+        Hierarchical raga matching following Carnatic music theory:
+        
+        1. Match detected swaras to closest melakarta (weighted by occurrence)
+        2. Find janya ragas of that melakarta
+        3. Rank: non-vakra exact > non-vakra subset > vakra > anya-swara
+        
+        This avoids flat comparison of all 5,000+ ragas and instead uses the
+        melakarta system to narrow candidates naturally, mirroring how a
+        musician would reason about raga identification.
+        
+        Falls back to flat match_swaras() if no melakarta scores well.
+        """
+        swaras = self._normalize_swaras(detected_swaras)
+        if not swaras:
+            return []
+        
+        inner_swaras = [s for s in swaras if s != 'S']
+        if not inner_swaras:
+            return []
+        
+        detected_semitones = set(SWARA_TO_SEMITONE[s] for s in inner_swaras)
+        detected_var = set(s for s in detected_semitones if s not in (0, 7))
+        
+        # Step 1: Build weighted semitone counts from raw sequence
+        semi_counts = self._count_semitones(raw_sequence, inner_swaras)
+        total_weight = sum(semi_counts.values())
+        if total_weight == 0:
+            return self.match_swaras(
+                detected_swaras, direction, max_results, min_score, raw_sequence)
+        
+        # De-noise detected_var: remove semitones that appear only once
+        # when a ±1 neighbor appears 3× more (slide/gamaka artifact)
+        denoised_var = set(detected_var)
+        for semi in list(denoised_var):
+            cnt = semi_counts.get(semi, 0)
+            if cnt > 1:
+                continue
+            for delta in (-1, 1):
+                nbr = semi + delta
+                if nbr in semi_counts and semi_counts[nbr] >= max(3, cnt * 3):
+                    denoised_var.discard(semi)
+                    break
+        
+        # Step 2: Rank melakartas by how well they cover detected swaras
+        melakarta_rankings = self._rank_melakartas(semi_counts)
+        if not melakarta_rankings:
+            return self.match_swaras(
+                detected_swaras, direction, max_results, min_score, raw_sequence)
+        
+        best_mel_score = melakarta_rankings[0][1]
+        # Consider melakartas scoring at least 75% of best
+        top_melakartas = [
+            (m, s) for m, s in melakarta_rankings
+            if s >= best_mel_score * 0.75 and s > 0.3
+        ]
+        
+        if not top_melakartas:
+            return self.match_swaras(
+                detected_swaras, direction, max_results, min_score, raw_sequence)
+        
+        # Log top melakartas for debugging
+        top3 = [(MELAKARTA_72[m][0], m, f"{s:.0%}")
+                for m, s in top_melakartas[:3]]
+        print(f"  Top melakartas: {top3}")
+        
+        # Step 3: Gather and score candidate ragas from top families
+        asc_semis, desc_semis = self._split_asc_desc(raw_sequence)
+        results = []
+        seen: Set[str] = set()
+        
+        for family_rank, (mnum, mel_score) in enumerate(top_melakartas[:5]):
+            mname, m_variable_semis = MELAKARTA_72[mnum]
+            m_var_set = set(m_variable_semis)
+            
+            for raga_id, raga in self.ragas.items():
+                if raga_id in seen:
+                    continue
+                
+                # Raga's variable semitones (exclude Sa and Pa)
+                raga_var_semis: Set[int] = set()
+                for s in raga.all_swaras_set:
+                    semi = SWARA_TO_SEMITONE[s]
+                    if semi not in (0, 7):
+                        raga_var_semis.add(semi)
+                
+                # Classify relationship to this melakarta
+                anya_semis = raga_var_semis - m_var_set
+                if len(anya_semis) > 1:
+                    continue  # Too distant from this melakarta family
+                has_anya = len(anya_semis) == 1
+                
+                # Score raga against denoised detected swaras
+                matched = denoised_var & raga_var_semis
+                extra = denoised_var - raga_var_semis
+                missing = raga_var_semis - denoised_var
+                
+                n_matched = len(matched)
+                if n_matched == 0:
+                    continue
+                
+                # Coverage: fraction of detected weight in this raga
+                matched_weight = sum(semi_counts.get(s, 0) for s in matched)
+                coverage = matched_weight / total_weight
+                
+                # Penalty for detected swaras NOT in the raga
+                extra_weight = sum(semi_counts.get(s, 0) for s in extra)
+                extra_penalty = (extra_weight / total_weight) * 0.30
+                
+                # Penalty for raga swaras we didn't detect
+                miss_penalty = len(missing) * 0.06
+                
+                score = coverage - extra_penalty - miss_penalty
+                
+                # Tier bonuses based on raga classification
+                is_vakra = self._is_vakra(raga)
+                is_exact_mel = (raga_var_semis == m_var_set)
+                
+                if raga.is_melakarta:
+                    # The canonical melakarta always gets top tier + bonus,
+                    # regardless of vakra phrasing in the DB avarohanam
+                    score += 0.10
+                elif is_exact_mel and not is_vakra:
+                    score += 0.08   # Sampurna non-vakra (melakarta-equivalent)
+                elif is_exact_mel and is_vakra:
+                    score += 0.05   # Sampurna but vakra ordering
+                elif not has_anya and not is_vakra:
+                    score += 0.04   # Clean non-vakra janya
+                elif not has_anya and is_vakra:
+                    score += 0.02   # Vakra janya (still in family)
+                elif has_anya:
+                    score -= 0.03   # Anya-swara raga
+                
+                # Bonus for perfect match (no missing, no extra swaras)
+                if not extra and not missing:
+                    score += 0.015
+                
+                # Popularity bonus: well-known ragas preferred over obscure ones
+                score += self._popularity_score(raga_id)
+                
+                # Small penalty for less-likely melakarta families
+                score -= family_rank * 0.02
+                
+                # Asymmetric matching: reward ragas whose arohanam/avarohanam
+                # structure matches which swaras appear in each direction
+                if asc_semis is not None and desc_semis is not None:
+                    asym = self._asymmetric_score(asc_semis, desc_semis, raga)
+                    score = score * 0.65 + asym * 0.35
+                
+                if score < min_score:
+                    continue
+                
+                seen.add(raga_id)
+                
+                # Classify match type
+                if not extra and not missing:
+                    match_type = 'exact'
+                elif not extra:
+                    match_type = 'superset'
+                elif not missing:
+                    match_type = 'subset'
+                else:
+                    match_type = 'partial'
+                
+                matched_swaras = [s for s in raga.all_swaras_set
+                                  if SWARA_TO_SEMITONE[s] in matched]
+                extra_swaras = [str(s) for s in sorted(extra)]
+                missing_swaras = [s for s in raga.all_swaras_set
+                                  if SWARA_TO_SEMITONE[s] in missing]
+                
+                mel_label = f"#{mnum} {mname}"
+                tier = ("anya" if has_anya
+                        else "vakra" if is_vakra
+                        else "non-vakra")
+                
+                results.append(RagaMatch(
+                    raga_id=raga_id,
+                    raga_name=raga.name,
+                    score=score,
+                    match_type=match_type,
+                    arohanam=raga.arohanam,
+                    avarohanam=raga.avarohanam,
+                    matched_swaras=sorted(matched_swaras),
+                    extra_swaras=extra_swaras,
+                    missing_swaras=sorted(missing_swaras),
+                    is_melakarta=raga.is_melakarta,
+                    melakarta_number=raga.melakarta_number,
+                    parent_melakarta=raga.parent_melakarta or mel_label,
+                    details=(f"Melakarta {mel_label} | {tier} "
+                             f"| coverage={coverage:.0%}"
+                             f"{f' | {self.popularity.get(raga_id, 0)} compositions' if self.popularity.get(raga_id, 0) else ''}"),
+                ))
+        
+        results.sort(key=lambda m: (-m.score, m.raga_name))
         return results[:max_results]
     
     def _sequence_order_score(
@@ -735,72 +1210,54 @@ if __name__ == '__main__':
     matcher = SwaraSequenceMatcher()
     print(matcher.summary())
     
-    print("\n" + "=" * 60)
-    print("Test: Identify Mohanam (S R2 G3 P D2 S)")
-    print("=" * 60)
-    results = matcher.match_swaras(['S', 'R2', 'G3', 'P', 'D2', 'S'], direction='ascending')
-    for i, m in enumerate(results[:10], 1):
-        print(format_match_result(m, rank=i))
-        print()
+    # Use hierarchical matching for all tests
+    def run_test(label, swaras, direction='ascending', raw_seq=None):
+        print("\n" + "=" * 60)
+        print(f"Test: {label}")
+        print("=" * 60)
+        results = matcher.match_swaras_hierarchical(
+            swaras, direction=direction, max_results=20, raw_sequence=raw_seq)
+        for i, m in enumerate(results[:5], 1):
+            print(format_match_result(m, rank=i))
+            print()
+        # Check #1 result
+        if results:
+            print(f"  >>> Top match: {results[0].raga_name}")
+        return results
     
-    print("=" * 60)
-    print("Test: Identify Kalyani (S R2 G3 M2 P D2 N3 S)")
-    print("=" * 60)
-    results = matcher.match_swaras(['S', 'R2', 'G3', 'M2', 'P', 'D2', 'N3', 'S'], direction='ascending')
-    for i, m in enumerate(results[:10], 1):
-        print(format_match_result(m, rank=i))
-        print()
+    run_test("Mohanam (S R2 G3 P D2 S)",
+             ['S', 'R2', 'G3', 'P', 'D2', 'S'])
     
-    print("=" * 60)
-    print("Test: Identify Bahudari (S G3 M1 P D2 N2 S)")
-    print("=" * 60)
-    results = matcher.match_swaras(['S', 'G3', 'M1', 'P', 'D2', 'N2', 'S'], direction='ascending')
-    for i, m in enumerate(results[:10], 1):
-        print(format_match_result(m, rank=i))
-        print()
+    run_test("Kalyani (S R2 G3 M2 P D2 N3 S)",
+             ['S', 'R2', 'G3', 'M2', 'P', 'D2', 'N3', 'S'])
     
-    print("=" * 60)
-    print("Test: Identify Shankarabharanam (S R2 G3 M1 P D2 N3 S)")
-    print("=" * 60)
-    results = matcher.match_swaras(['S', 'R2', 'G3', 'M1', 'P', 'D2', 'N3', 'S'], direction='ascending')
-    for i, m in enumerate(results[:10], 1):
-        print(format_match_result(m, rank=i))
-        print()
+    run_test("Bahudari (S G3 M1 P D2 N2 S)",
+             ['S', 'G3', 'M1', 'P', 'D2', 'N2', 'S'])
     
-    print("=" * 60)
-    print("Test: Identify Hamsadhwani (S R2 G3 P N3 S)")
-    print("=" * 60)
-    results = matcher.match_swaras(['S', 'R2', 'G3', 'P', 'N3', 'S'], direction='ascending')
-    for i, m in enumerate(results[:10], 1):
-        print(format_match_result(m, rank=i))
-        print()
+    run_test("Shankarabharanam (S R2 G3 M1 P D2 N3 S)",
+             ['S', 'R2', 'G3', 'M1', 'P', 'D2', 'N3', 'S'])
     
-    # Interactive mode
-    print("\n" + "=" * 60)
-    print("Interactive Mode - Enter swaras separated by spaces")
-    print("Example: S R2 G3 P D2 S")
-    print("Type 'quit' to exit")
-    print("=" * 60)
+    run_test("Hamsadhwani (S R2 G3 P N3 S)",
+             ['S', 'R2', 'G3', 'P', 'N3', 'S'])
     
-    while True:
-        try:
-            user_input = input("\nEnter swaras: ").strip()
-            if user_input.lower() in ('quit', 'exit', 'q'):
-                break
-            
-            swaras = user_input.split()
-            if not swaras:
-                continue
-            
-            results = matcher.match_swaras(swaras, direction='ascending')
-            if results:
-                print(f"\nTop matches ({len(results)} found):")
-                for i, m in enumerate(results[:10], 1):
-                    print(format_match_result(m, rank=i))
-                    print()
-            else:
-                print("No matching ragas found.")
-        except (EOFError, KeyboardInterrupt):
-            break
+    run_test("Kharaharapriya (S R2 G2 M1 P D2 N2 S)",
+             ['S', 'R2', 'G2', 'M1', 'P', 'D2', 'N2', 'S'])
     
-    print("Done.")
+    run_test("Todi / Shubhapantuvarali (S R1 G2 M2 P D1 N3 S)",
+             ['S', 'R1', 'G2', 'M2', 'P', 'D1', 'N3', 'S'])
+    
+    # Saraswati with spurious R1 (real test case from voice detection)
+    run_test("Saraswati voice (S R2 M2 P D2 N2 + spurious R1)",
+             ['S', 'R2', 'M2', 'P', 'D2', 'N2', 'R1', 'S'],
+             direction='both',
+             raw_seq=['S', 'R2', 'R2', 'M2', 'M2', 'P', 'P', 'D2', 'D2', 'S',
+                      'S', 'N2', 'N2', 'D2', 'P', 'M2', 'M2', 'R1', 'R2', 'R2', 'S'])
+    
+    # Saraswati clean (no noise) — should match easily
+    run_test("Saraswati clean (S R2 M2 P D2 / S N2 D2 P M2 R2)",
+             ['S', 'R2', 'M2', 'P', 'D2', 'N2', 'S'],
+             direction='both',
+             raw_seq=['S', 'R2', 'M2', 'P', 'D2', 'S',
+                      'S', 'N2', 'D2', 'P', 'M2', 'R2', 'S'])
+    
+    print("\nDone.")
