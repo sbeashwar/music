@@ -535,11 +535,25 @@ class ArohanamDetector:
         else:
             stable_pitches = pitches
         median_semi = np.median(stable_pitches)
-        semitone = int(round(median_semi)) % 12
         
-        # Handle negative semitones (below tonic) 
-        if median_semi < -0.5:
-            semitone = (12 + int(round(median_semi)) % 12) % 12
+        # Map continuous semitone to nearest discrete semitone (0-11).
+        rounded = int(round(median_semi))
+        
+        # Special handling for the N3/upper-Sa boundary.
+        # round(11.56) = 12, but 11.56 is still below the octave and
+        # likely represents N3 in the singer's voice.  If the raw pitch
+        # is more than 0.25 semitones (25 cents) below an octave
+        # boundary, classify as N3 (semi 11) rather than upper Sa.
+        if rounded != 0 and rounded % 12 == 0:
+            octave = rounded  # 12, 24, ...
+            if median_semi < octave - 0.25:
+                semitone = 11
+            else:
+                semitone = 0
+        elif median_semi < -0.5:
+            semitone = (12 + rounded % 12) % 12
+        else:
+            semitone = rounded % 12
         
         swara = SEMITONE_TO_SWARA.get(semitone, f'?{semitone}')
         
