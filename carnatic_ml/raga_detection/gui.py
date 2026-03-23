@@ -52,6 +52,7 @@ class RagaGUI:
         self.is_recording = False
         self.record_seconds = 30
         self.last_generated_wav = None
+        self.live_detector = None
 
         self._create_widgets()
         self._load_backend_async()
@@ -75,6 +76,11 @@ class RagaGUI:
         self.play_tab = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(self.play_tab, text="  Play Raga  ")
         self._create_play_tab()
+
+        # --- Tab 3: Live Detect ---
+        self.live_tab = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(self.live_tab, text="  Live Detect  ")
+        self._create_live_tab()
 
         # --- Status bar (shared) ---
         status_frame = ttk.Frame(self.root)
@@ -731,6 +737,219 @@ class RagaGUI:
         os.makedirs(out_dir, exist_ok=True)
         os.startfile(out_dir)
 
+    # ========================== LIVE DETECT TAB ==========================
+    def _create_live_tab(self):
+        tab = self.live_tab
+        tab.columnconfigure(0, weight=1)
+        tab.rowconfigure(4, weight=1)  # results row
+
+        # Title
+        ttk.Label(
+            tab, text="Live Raga Detection",
+            font=("Segoe UI", 14, "bold")
+        ).grid(row=0, column=0, pady=(0, 5))
+
+        ttk.Label(
+            tab,
+            text="Sing a krithi / raga phrases — detection runs continuously until the raga is identified.",
+            foreground="gray", font=("Segoe UI", 9),
+            wraplength=700,
+        ).grid(row=1, column=0, pady=(0, 8))
+
+        # -- Control frame --
+        ctrl_frame = ttk.Frame(tab)
+        ctrl_frame.grid(row=2, column=0, sticky="ew", pady=(0, 8))
+        ctrl_frame.columnconfigure(2, weight=1)
+
+        self.live_btn = ttk.Button(
+            ctrl_frame, text="Start Listening",
+            command=self._toggle_live, width=18,
+        )
+        self.live_btn.grid(row=0, column=0, padx=(0, 10))
+        if not HAS_SOUNDDEVICE:
+            self.live_btn.configure(state="disabled")
+
+        self.live_elapsed_var = tk.StringVar(value="")
+        ttk.Label(
+            ctrl_frame, textvariable=self.live_elapsed_var,
+            font=("Segoe UI", 10),
+        ).grid(row=0, column=1, padx=(0, 10))
+
+        self.live_confidence_var = tk.StringVar(value="")
+        self.live_conf_label = ttk.Label(
+            ctrl_frame, textvariable=self.live_confidence_var,
+            font=("Segoe UI", 10, "bold"),
+        )
+        self.live_conf_label.grid(row=0, column=2, sticky="w")
+
+        # -- Live swara display --
+        swara_frame = ttk.LabelFrame(tab, text="Detected Swaras", padding=8)
+        swara_frame.grid(row=3, column=0, sticky="ew", pady=(0, 8))
+        swara_frame.columnconfigure(0, weight=1)
+
+        self.live_swara_var = tk.StringVar(value="—")
+        ttk.Label(
+            swara_frame, textvariable=self.live_swara_var,
+            font=("Consolas", 14), foreground="#2060a0",
+        ).grid(row=0, column=0, sticky="w")
+
+        self.live_seq_var = tk.StringVar(value="")
+        ttk.Label(
+            swara_frame, textvariable=self.live_seq_var,
+            font=("Consolas", 9), foreground="gray",
+            wraplength=700, justify="left",
+        ).grid(row=1, column=0, sticky="w", pady=(4, 0))
+
+        # -- Results --
+        results_frame = ttk.LabelFrame(tab, text="Top Matches (updating live)", padding=8)
+        results_frame.grid(row=4, column=0, sticky="nsew")
+        results_frame.columnconfigure(0, weight=1)
+        results_frame.rowconfigure(0, weight=1)
+
+        self.live_results = tk.Text(
+            results_frame, wrap="word", font=("Consolas", 10),
+            state="disabled", bg="#f5f5f5",
+        )
+        self.live_results.grid(row=0, column=0, sticky="nsew")
+        sb = ttk.Scrollbar(results_frame, orient="vertical",
+                           command=self.live_results.yview)
+        sb.grid(row=0, column=1, sticky="ns")
+        self.live_results.configure(yscrollcommand=sb.set)
+
+    # ------------------------------------------------------------------ LIVE: Controls
+    def _toggle_live(self):
+        if self.live_detector and self.live_detector.is_running:
+            self._stop_live()
+        else:
+            self._start_live()
+
+    def _start_live(self):
+        if not self.matcher:
+            return
+
+        from raga_detection.realtime_detector import RealtimeRagaDetector
+
+        self.live_detector = RealtimeRagaDetector(
+            matcher=self.matcher,
+            on_update=lambda s: self.root.after(0, lambda: self._on_live_update(s)),
+        )
+
+        self.live_btn.configure(text="Stop Listening")
+        self.live_elapsed_var.set("0s")
+        self.live_confidence_var.set("listening...")
+        self.live_conf_label.configure(foreground="gray")
+        self.live_swara_var.set("—")
+        self.live_seq_var.set("")
+        self._set_live_text(
+            "Listening... sing raga phrases into your microphone.\n\n"
+            "  - Sing naturally (krithis, phrases, or scales)\n"
+            "  - Detection updates every ~3 seconds\n"
+            "  - Will auto-stop when raga is identified with high confidence\n"
+            "  - Or click 'Stop Listening' for the best guess so far\n"
+        )
+        self.status_var.set("Live detection active — listening...")
+        self.live_detector.start()
+
+    def _stop_live(self):
+        if self.live_detector:
+            self.live_detector.stop()
+            # The finalise callback will fire and update the UI
+            self.live_btn.configure(text="Start Listening")
+
+    # ------------------------------------------------------------------ LIVE: Updates
+    def _on_live_update(self, status):
+        from raga_detection.realtime_detector import LiveStatus
+
+        # Update elapsed time
+        secs = int(status.elapsed_seconds)
+        self.live_elapsed_var.set(f"{secs}s")
+
+        # Update confidence indicator
+        conf = status.confidence
+        color_map = {
+            "listening...": "gray",
+            "low": "#c06000",
+            "medium": "#a0a000",
+            "high": "#00a000",
+            "detected!": "#008000",
+            "best guess": "#806000",
+            "insufficient audio": "red",
+        }
+        self.live_confidence_var.set(conf)
+        self.live_conf_label.configure(
+            foreground=color_map.get(conf, "gray"))
+
+        # Update detected swaras
+        if status.current_swaras:
+            self.live_swara_var.set(" ".join(status.current_swaras))
+        if status.raw_sequence:
+            # Show last 30 notes of the sequence
+            seq = status.raw_sequence[-30:]
+            self.live_seq_var.set(" → ".join(seq))
+
+        # Update results
+        if status.top5:
+            lines = []
+            if status.done:
+                lines.append("=" * 52)
+                if status.confidence == "detected!":
+                    lines.append("  ★ RAGA DETECTED ★")
+                else:
+                    lines.append(f"  BEST GUESS ({status.confidence})")
+                lines.append("=" * 52)
+            else:
+                lines.append(f"  updating... ({secs}s elapsed)")
+                lines.append("-" * 52)
+
+            lines.append("")
+            if status.tonic_hz > 0:
+                lines.append(f"  Tonic (Sa): {status.tonic_hz:.1f} Hz")
+            if status.current_swaras:
+                lines.append(f"  Swaras:     {' '.join(status.current_swaras)}")
+            lines.append("")
+
+            for i, (name, score) in enumerate(status.top5, 1):
+                pct = min(score * 100, 100.0)
+                bar = "█" * int(pct / 5)
+                marker = " ◄" if i == 1 else ""
+                lines.append(f"  {i}. {name:<26} {pct:5.1f}% {bar}{marker}")
+
+            if status.swara_counts:
+                lines.append("")
+                lines.append("  Swara frequency:")
+                sorted_counts = sorted(
+                    status.swara_counts.items(),
+                    key=lambda x: -x[1])
+                counts_str = "  " + "  ".join(
+                    f"{s}:{c}" for s, c in sorted_counts if s != 'S')
+                lines.append(counts_str)
+
+            if status.done:
+                lines.append("")
+                lines.append(f"  Listened for {secs} seconds")
+                lines.append("-" * 52)
+
+            self._set_live_text("\n".join(lines))
+
+        # Update status bar
+        if status.top_match:
+            self.status_var.set(
+                f"Live: {status.top_match} ({min(status.top_score * 100, 100):.0f}%) "
+                f"| {conf} | {secs}s")
+
+        # Handle errors
+        if status.error:
+            self._set_live_text(f"Error: {status.error}")
+            self.status_var.set(f"Live detection error: {status.error}")
+
+        # Handle completion
+        if status.done:
+            self.live_btn.configure(text="Start Listening")
+            if status.top_match:
+                self.status_var.set(
+                    f"Live detection complete: {status.top_match} "
+                    f"({min(status.top_score * 100, 100):.0f}%)")
+
     # ------------------------------------------------------------------ HELPERS
     def _set_detect_text(self, text):
         self.detect_results.configure(state="normal")
@@ -743,6 +962,12 @@ class RagaGUI:
         self.play_info.delete(1.0, tk.END)
         self.play_info.insert(1.0, text)
         self.play_info.configure(state="disabled")
+
+    def _set_live_text(self, text):
+        self.live_results.configure(state="normal")
+        self.live_results.delete(1.0, tk.END)
+        self.live_results.insert(1.0, text)
+        self.live_results.configure(state="disabled")
 
 
 def main():
