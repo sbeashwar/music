@@ -3,26 +3,49 @@
 **Raga Detection and Generation for Carnatic Music**
 
 A practical toolkit for:
-1. **Raga Detection** - Identify the ragam from a 30-second audio clip
-2. **Raga Generation** - Generate melodies in any of 2500+ ragas
+1. **Raga Detection** - Identify the ragam from audio (file, mic recording, or live singing)
+2. **Raga Generation** - Generate melodies in any of 5,321 ragas
+3. **GUI App** - Tkinter interface with Detect / Play / Live Detect tabs
+
+## Setup (Fresh Machine)
+
+Requires **Python 3.11** (some deps don't yet support 3.12+).
+
+```bash
+# Clone
+git clone https://github.com/sbeashwar/music.git
+cd music/carnatic_ml
+
+# Create venv (recommended)
+py -3.11 -m venv .venv
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # macOS/Linux
+
+# Install
+pip install -r requirements.txt
+pip install sounddevice         # for microphone input (live detect / mic recording)
+
+# Launch GUI
+py -3.11 raga_detection/gui.py
+```
+
+**Optional but recommended:**
+- **ffmpeg** for decoding `.m4a` / `.mp4` audio files
+  - Windows: `winget install ffmpeg`
+  - macOS: `brew install ffmpeg`
+  - Linux: `sudo apt install ffmpeg`
 
 ## Quick Start
 
 ```bash
-# Install dependencies
-pip install numpy librosa pretty_midi soundfile
+# Launch the GUI (Detect / Play / Live Detect tabs)
+py -3.11 raga_detection/gui.py
 
-# List available ragas
-python -m carnatic list
-
-# Get raga info
-python -m carnatic info mohanam
-
-# Generate a melody
-python -m carnatic generate mohanam -o mohanam.mid
-
-# Detect raga from audio
-python -m carnatic detect sample.wav
+# Or use the CLI:
+python -m carnatic list                          # List available ragas
+python -m carnatic info mohanam                  # Get raga info
+python -m carnatic generate mohanam -o mohanam.mid  # Generate a melody
+python -m carnatic detect sample.wav             # Detect raga from audio
 ```
 
 ## How It Works
