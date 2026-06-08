@@ -7,7 +7,14 @@ Two main features:
 """
 
 import sys
+import os
 from pathlib import Path
+
+# Fix Windows console encoding for Unicode raga names (e.g. diacritics like ā)
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    os.environ.setdefault('PYTHONIOENCODING', 'utf-8')
 
 # Ensure project root is on sys.path
 _project_root = str(Path(__file__).resolve().parent.parent)
@@ -751,7 +758,7 @@ class RagaGUI:
 
         ttk.Label(
             tab,
-            text="Sing a krithi / raga phrases — detection runs continuously until the raga is identified.",
+            text="Sing a krithi or play a song — swaras accumulate across windows until the raga is identified.",
             foreground="gray", font=("Segoe UI", 9),
             wraplength=700,
         ).grid(row=1, column=0, pady=(0, 8))
@@ -759,13 +766,19 @@ class RagaGUI:
         # -- Control frame --
         ctrl_frame = ttk.Frame(tab)
         ctrl_frame.grid(row=2, column=0, sticky="ew", pady=(0, 8))
-        ctrl_frame.columnconfigure(2, weight=1)
+        ctrl_frame.columnconfigure(3, weight=1)
 
         self.live_btn = ttk.Button(
             ctrl_frame, text="Start Listening",
             command=self._toggle_live, width=18,
         )
-        self.live_btn.grid(row=0, column=0, padx=(0, 10))
+        self.live_btn.grid(row=0, column=0, padx=(0, 5))
+
+        self.live_file_btn = ttk.Button(
+            ctrl_frame, text="Detect from File",
+            command=self._live_from_file, width=16,
+        )
+        self.live_file_btn.grid(row=0, column=1, padx=(0, 10))
         if not HAS_SOUNDDEVICE:
             self.live_btn.configure(state="disabled")
 
@@ -773,14 +786,14 @@ class RagaGUI:
         ttk.Label(
             ctrl_frame, textvariable=self.live_elapsed_var,
             font=("Segoe UI", 10),
-        ).grid(row=0, column=1, padx=(0, 10))
+        ).grid(row=0, column=2, padx=(0, 10))
 
         self.live_confidence_var = tk.StringVar(value="")
         self.live_conf_label = ttk.Label(
             ctrl_frame, textvariable=self.live_confidence_var,
             font=("Segoe UI", 10, "bold"),
         )
-        self.live_conf_label.grid(row=0, column=2, sticky="w")
+        self.live_conf_label.grid(row=0, column=3, sticky="w")
 
         # -- Live swara display --
         swara_frame = ttk.LabelFrame(tab, text="Detected Swaras", padding=8)
@@ -835,6 +848,7 @@ class RagaGUI:
         )
 
         self.live_btn.configure(text="Stop Listening")
+        self.live_file_btn.configure(state="disabled")
         self.live_elapsed_var.set("0s")
         self.live_confidence_var.set("listening...")
         self.live_conf_label.configure(foreground="gray")
@@ -843,18 +857,55 @@ class RagaGUI:
         self._set_live_text(
             "Listening... sing raga phrases into your microphone.\n\n"
             "  - Sing naturally (krithis, phrases, or scales)\n"
-            "  - Detection updates every ~3 seconds\n"
+            "  - Swaras accumulate across 5-second windows\n"
             "  - Will auto-stop when raga is identified with high confidence\n"
             "  - Or click 'Stop Listening' for the best guess so far\n"
         )
         self.status_var.set("Live detection active — listening...")
         self.live_detector.start()
 
+    def _live_from_file(self):
+        """Run live detection on an audio file (MP3, WAV, etc.)."""
+        if not self.matcher:
+            return
+        path = filedialog.askopenfilename(
+            title="Select Audio File for Live Detection",
+            filetypes=[
+                ("Audio files", "*.mp3 *.wav *.flac *.ogg *.m4a"),
+                ("All files", "*.*")
+            ]
+        )
+        if not path:
+            return
+
+        from raga_detection.realtime_detector import RealtimeRagaDetector
+
+        self.live_detector = RealtimeRagaDetector(
+            matcher=self.matcher,
+            on_update=lambda s: self.root.after(0, lambda: self._on_live_update(s)),
+        )
+
+        self.live_btn.configure(state="disabled")
+        self.live_file_btn.configure(text="Stop", command=self._stop_live)
+        self.live_elapsed_var.set("0s")
+        self.live_confidence_var.set("processing...")
+        self.live_conf_label.configure(foreground="gray")
+        self.live_swara_var.set("—")
+        self.live_seq_var.set("")
+        name = Path(path).name
+        if len(name) > 40:
+            name = name[:37] + "..."
+        self._set_live_text(f"Processing: {name}\n\nAnalysing in 5-second windows...")
+        self.status_var.set(f"Live detection from file: {name}")
+        self.live_detector.start_file(path)
+
     def _stop_live(self):
         if self.live_detector:
             self.live_detector.stop()
-            # The finalise callback will fire and update the UI
-            self.live_btn.configure(text="Start Listening")
+        self.live_btn.configure(text="Start Listening", state="normal",
+                                command=self._toggle_live)
+        self.live_file_btn.configure(text="Detect from File", state="normal",
+                                     command=self._live_from_file)
 
     # ------------------------------------------------------------------ LIVE: Updates
     def _on_live_update(self, status):
@@ -868,6 +919,8 @@ class RagaGUI:
         conf = status.confidence
         color_map = {
             "listening...": "gray",
+            "processing...": "gray",
+            "loading file...": "gray",
             "low": "#c06000",
             "medium": "#a0a000",
             "high": "#00a000",
@@ -898,7 +951,8 @@ class RagaGUI:
                     lines.append(f"  BEST GUESS ({status.confidence})")
                 lines.append("=" * 52)
             else:
-                lines.append(f"  updating... ({secs}s elapsed)")
+                wc = status.window_count
+                lines.append(f"  updating... ({secs}s elapsed, {wc} windows processed)")
                 lines.append("-" * 52)
 
             lines.append("")
@@ -926,7 +980,8 @@ class RagaGUI:
 
             if status.done:
                 lines.append("")
-                lines.append(f"  Listened for {secs} seconds")
+                wc = status.window_count
+                lines.append(f"  Processed {wc} windows ({secs}s of audio)")
                 lines.append("-" * 52)
 
             self._set_live_text("\n".join(lines))
@@ -944,7 +999,7 @@ class RagaGUI:
 
         # Handle completion
         if status.done:
-            self.live_btn.configure(text="Start Listening")
+            self._stop_live()
             if status.top_match:
                 self.status_var.set(
                     f"Live detection complete: {status.top_match} "

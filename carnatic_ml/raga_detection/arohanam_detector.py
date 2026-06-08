@@ -154,10 +154,36 @@ class ArohanamDetector:
             if y.ndim > 1:
                 y = np.mean(y, axis=1)
         except Exception:
-            y, _ = librosa.load(audio_path, sr=self.sample_rate)
+            try:
+                y, _ = librosa.load(audio_path, sr=self.sample_rate)
+            except Exception:
+                # Fallback: use ffmpeg for m4a/mp4/aac
+                y = self._load_with_ffmpeg(audio_path)
         
         return self.detect_from_audio(y)
-    
+
+    def _load_with_ffmpeg(self, audio_path: str) -> np.ndarray:
+        """Decode audio file via ffmpeg (handles m4a/mp4/aac/etc.)."""
+        import subprocess, tempfile, os
+        try:
+            import imageio_ffmpeg
+            ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+        except ImportError:
+            ffmpeg = 'ffmpeg'
+
+        tmp = tempfile.mktemp(suffix='.wav')
+        try:
+            subprocess.run(
+                [ffmpeg, '-i', audio_path, '-ac', '1',
+                 '-ar', str(self.sample_rate), '-f', 'wav', '-y', tmp],
+                capture_output=True, check=True,
+            )
+            y, _ = librosa.load(tmp, sr=self.sample_rate)
+            return y
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+
     def detect_from_audio(self, audio: np.ndarray) -> ArohanamResult:
         """
         Detect arohanam/avarohanam from audio samples.
