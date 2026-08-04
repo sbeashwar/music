@@ -1,0 +1,187 @@
+{
+  "name": "generated_scales",
+  "description": "Programmatically generated clean scales - sanity check (should be ~100% top-1)",
+  "created": "2026-06-17",
+  "recordings": [
+    {
+      "id": "gen_mohanam",
+      "path": "eval/test_audio/generated/mohanam_scale.wav",
+      "raga": "mohanam",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'P', 'D2', 'S'] / ['S', 'D2', 'P', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_kalyani",
+      "path": "eval/test_audio/generated/kalyani_scale.wav",
+      "raga": "kalyani",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'M2', 'P', 'D2', 'N3', 'S'] / ['S', 'N3', 'D2', 'P', 'M2', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_shankarabharanam",
+      "path": "eval/test_audio/generated/shankarabharanam_scale.wav",
+      "raga": "shankarabharanam",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'M1', 'P', 'D2', 'N3', 'S'] / ['S', 'D2', 'P', 'M1', 'G3', 'R2', 'S', 'N3', 'P', 'D2', 'N3', 'S']"
+    },
+    {
+      "id": "gen_bhairavi",
+      "path": "eval/test_audio/generated/bhairavi_scale.wav",
+      "raga": "bhairavi",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G2', 'M1', 'P', 'D2', 'N2', 'S'] / ['S', 'N2', 'D1', 'P', 'M1', 'G2', 'R2', 'S']"
+    },
+    {
+      "id": "gen_thodi",
+      "path": "eval/test_audio/generated/thodi_scale.wav",
+      "raga": "thodi",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R1', 'G2', 'M1', 'P', 'D1', 'N2', 'S'] / ['S', 'N2', 'D1', 'P', 'M1', 'G2', 'R1', 'S']"
+    },
+    {
+      "id": "gen_kharaharapriya",
+      "path": "eval/test_audio/generated/kharaharapriya_scale.wav",
+      "raga": "kharaharapriya",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G2', 'M1', 'P', 'D2', 'N2', 'S'] / ['S', 'N2', 'D2', 'P', 'M1', 'G2', 'R2', 'S']"
+    },
+    {
+      "id": "gen_hamsadhwani",
+      "path": "eval/test_audio/generated/hamsadhwani_scale.wav",
+      "raga": "hamsadhwani",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'P', 'N3', 'S'] / ['S', 'N3', 'P', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_abheri",
+      "path": "eval/test_audio/generated/abheri_scale.wav",
+      "raga": "abheri",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'G2', 'M1', 'P', 'N2', 'S'] / ['S', 'N2', 'D2', 'P', 'M1', 'G2', 'R2', 'S']"
+    },
+    {
+      "id": "gen_hindolam",
+      "path": "eval/test_audio/generated/hindolam_scale.wav",
+      "raga": "hindolam",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'G2', 'M1', 'D1', 'N2', 'S'] / ['S', 'N2', 'D1', 'M1', 'G2', 'S']"
+    },
+    {
+      "id": "gen_madhyamavati",
+      "path": "eval/test_audio/generated/madhyamavati_scale.wav",
+      "raga": "madhyamavati",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'M1', 'P', 'N2', 'S'] / ['S', 'N2', 'P', 'M1', 'R2', 'S']"
+    },
+    {
+      "id": "gen_bilahari",
+      "path": "eval/test_audio/generated/bilahari_scale.wav",
+      "raga": "bilahari",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'P', 'D2', 'S'] / ['S', 'N3', 'D2', 'P', 'M1', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_kambhoji",
+      "path": "eval/test_audio/generated/kambhoji_scale.wav",
+      "raga": "kambhoji",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'M1', 'P', 'D2', 'S'] / ['S', 'N2', 'D2', 'P', 'M1', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_saveri",
+      "path": "eval/test_audio/generated/saveri_scale.wav",
+      "raga": "saveri",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R1', 'M1', 'P', 'D1', 'S'] / ['S', 'D1', 'P', 'M1', 'G3', 'R1', 'S']"
+    },
+    {
+      "id": "gen_anandabhairavi",
+      "path": "eval/test_audio/generated/anandabhairavi_scale.wav",
+      "raga": "anandabhairavi",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'G2', 'R2', 'G2', 'M1', 'P', 'D2', 'P', 'N2', 'S'] / ['S', 'N2', 'D2', 'P', 'M1', 'G2', 'R2', 'S']"
+    },
+    {
+      "id": "gen_begada",
+      "path": "eval/test_audio/generated/begada_scale.wav",
+      "raga": "begada",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'G3', 'R2', 'G3', 'M1', 'P', 'D2', 'N2', 'D2', 'P'] / ['S', 'N3', 'D2', 'P', 'M1', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_mayamalavagowla",
+      "path": "eval/test_audio/generated/mayamalavagowla_scale.wav",
+      "raga": "mayamalavagowla",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R1', 'G3', 'M1', 'P', 'D1', 'N3', 'S'] / ['S', 'N3', 'D1', 'P', 'M1', 'G3', 'R1', 'S']"
+    },
+    {
+      "id": "gen_sahana",
+      "path": "eval/test_audio/generated/sahana_scale.wav",
+      "raga": "sahana",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'G3', 'M1', 'P', 'M1', 'D2', 'N2', 'S'] / ['S', 'N2', 'S', 'D2', 'N2', 'D2', 'P', 'M1', 'G3', 'M1', 'R2', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_arabhi",
+      "path": "eval/test_audio/generated/arabhi_scale.wav",
+      "raga": "arabhi",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'M1', 'P', 'D1', 'S'] / ['S', 'D1', 'P', 'M1', 'G3', 'R2', 'S']"
+    },
+    {
+      "id": "gen_dhanyasi",
+      "path": "eval/test_audio/generated/dhanyasi_scale.wav",
+      "raga": "dhanyasi",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'G2', 'M1', 'P', 'N2', 'S'] / ['S', 'N2', 'D1', 'P', 'M1', 'G2', 'R1', 'S']"
+    },
+    {
+      "id": "gen_atana",
+      "path": "eval/test_audio/generated/atana_scale.wav",
+      "raga": "atana",
+      "raga_aliases": [],
+      "tonic_hz": 261.63,
+      "source": "generated",
+      "notes": "Generated scale: ['S', 'R2', 'M1', 'P', 'S'] / ['S', 'D2', 'P', 'M1', 'R2', 'S']"
+    }
+  ]
+}

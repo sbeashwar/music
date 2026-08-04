@@ -3,9 +3,8 @@
   "name": "pantuvaraaLi",
   "alternate_names": [],
   "is_melakarta": true,
-  "melakarta_number": "51",
+  "melakarta_number": 51,
   "arohanam": [
-    "(kaamavardhani)",
     "S",
     "R1",
     "G3",
@@ -49,15 +48,12 @@
       "N1",
       "N2"
     ],
-    "vakra_swaras": [
-      "N3",
-      "S"
-    ]
+    "vakra_swaras": []
   },
   "raga_classification": {
     "time_of_day": "",
     "rasa": "",
-    "type": "vakra",
+    "type": "krama",
     "arohana_type": "sampurna",
     "avarohana_type": "sampurna",
     "swara_count": 7

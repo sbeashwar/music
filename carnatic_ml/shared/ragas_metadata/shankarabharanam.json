@@ -16,16 +16,12 @@
   ],
   "avarohanam": [
     "S",
+    "N3",
     "D2",
     "P",
     "M1",
     "G3",
     "R2",
-    "S",
-    "N3",
-    "P",
-    "D2",
-    "N3",
     "S"
   ],
   "metadata": {
@@ -52,16 +48,12 @@
       "N1",
       "N2"
     ],
-    "vakra_swaras": [
-      "N3",
-      "S",
-      "D2"
-    ]
+    "vakra_swaras": []
   },
   "raga_classification": {
     "time_of_day": "",
     "rasa": "",
-    "type": "vakra",
+    "type": "krama",
     "arohana_type": "sampurna",
     "avarohana_type": "sampurna",
     "swara_count": 7

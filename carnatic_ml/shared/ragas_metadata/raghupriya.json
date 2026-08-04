@@ -3,12 +3,13 @@
   "name": "Raghupriya",
   "alternate_names": [],
   "is_melakarta": true,
-  "melakarta_number": "42",
+  "melakarta_number": 42,
   "arohanam": [
     "S",
     "R1",
     "G1",
     "M2",
+    "P",
     "D3",
     "N3",
     "S"
@@ -17,6 +18,7 @@
     "S",
     "N3",
     "D3",
+    "P",
     "M2",
     "G1",
     "R1",
@@ -41,24 +43,20 @@
       "G2",
       "G3",
       "M1",
-      "P",
       "D1",
       "D2",
       "N1",
       "N2"
     ],
-    "vakra_swaras": [
-      "N3",
-      "S"
-    ]
+    "vakra_swaras": []
   },
   "raga_classification": {
     "time_of_day": "",
     "rasa": "",
-    "type": "vakra",
-    "arohana_type": "shadava",
-    "avarohana_type": "shadava",
-    "swara_count": 6
+    "type": "krama",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
   },
   "melakartha": {
     "parent_name": "raghupriya",

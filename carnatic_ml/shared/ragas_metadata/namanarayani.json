@@ -3,23 +3,24 @@
   "name": "Namanarayani",
   "alternate_names": [],
   "is_melakarta": true,
-  "melakarta_number": "50",
+  "melakarta_number": 50,
   "arohanam": [
     "S",
     "R1",
-    "M1",
+    "G3",
+    "M2",
     "P",
     "D1",
-    "N1",
+    "N2",
     "S"
   ],
   "avarohanam": [
     "S",
-    "P",
+    "N2",
     "D1",
-    "N1",
     "P",
-    "M1",
+    "M2",
+    "G3",
     "R1",
     "S"
   ],
@@ -41,27 +42,21 @@
       "R3",
       "G1",
       "G2",
-      "G3",
-      "M2",
+      "M1",
       "D2",
       "D3",
-      "N2",
+      "N1",
       "N3"
     ],
-    "vakra_swaras": [
-      "P",
-      "S",
-      "D1",
-      "N1"
-    ]
+    "vakra_swaras": []
   },
   "raga_classification": {
     "time_of_day": "",
     "rasa": "",
-    "type": "vakra",
-    "arohana_type": "shadava",
-    "avarohana_type": "shadava",
-    "swara_count": 6
+    "type": "krama",
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
   },
   "melakartha": {
     "parent_name": "namanarayani",

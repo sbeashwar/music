@@ -19,16 +19,11 @@
   "avarohanam": [
     "S",
     "N2",
-    "S",
-    "D2",
-    "N2",
     "D2",
     "P",
     "M1",
     "G3",
     "M1",
-    "R2",
-    "G3",
     "R2",
     "S"
   ],
@@ -46,21 +41,14 @@
     "graha_swara": "",
     "amsa_swara": "",
     "varjya_swaras": [
-      "S",
       "R1",
-      "R2",
       "R3",
       "G1",
       "G2",
-      "G3",
-      "M1",
       "M2",
-      "P",
       "D1",
-      "D2",
       "D3",
       "N1",
-      "N2",
       "N3"
     ],
     "vakra_swaras": []

@@ -37,3 +37,11 @@ Thumbs.db
 # Misc
 *.pdf
 karnatik_comparison.json
+
+# analysis pitch-track cache
+eval/_revati_f0.npz
+*.npz
+
+# Generated eval audio (recreatable via eval/*.py)
+eval/test_audio/
+eval/results/*.json

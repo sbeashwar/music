@@ -3,12 +3,12 @@
   "name": "Ramapriya",
   "alternate_names": [],
   "is_melakarta": true,
-  "melakarta_number": "52",
+  "melakarta_number": 52,
   "arohanam": [
     "S",
-    "R2",
-    "G2",
-    "M1",
+    "R1",
+    "G3",
+    "M2",
     "P",
     "D2",
     "N2",
@@ -18,13 +18,10 @@
     "S",
     "N2",
     "D2",
-    "N2",
     "P",
-    "M1",
-    "G2",
-    "M1",
-    "R2",
-    "G2",
+    "M2",
+    "G3",
+    "R1",
     "S"
   ],
   "metadata": {
@@ -41,27 +38,22 @@
     "graha_swara": "",
     "amsa_swara": "",
     "varjya_swaras": [
-      "R1",
+      "R2",
       "R3",
       "G1",
-      "G3",
-      "M2",
+      "G2",
+      "M1",
       "D1",
       "D3",
       "N1",
       "N3"
     ],
-    "vakra_swaras": [
-      "G2",
-      "S",
-      "N2",
-      "M1"
-    ]
+    "vakra_swaras": []
   },
   "raga_classification": {
     "time_of_day": "",
     "rasa": "",
-    "type": "vakra",
+    "type": "krama",
     "arohana_type": "sampurna",
     "avarohana_type": "sampurna",
     "swara_count": 7

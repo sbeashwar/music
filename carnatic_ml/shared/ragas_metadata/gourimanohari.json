@@ -3,9 +3,27 @@
   "name": "Gourimanohari",
   "alternate_names": [],
   "is_melakarta": true,
-  "melakarta_number": "23",
-  "arohanam": [],
-  "avarohanam": [],
+  "melakarta_number": 23,
+  "arohanam": [
+    "S",
+    "R2",
+    "G2",
+    "M1",
+    "P",
+    "D2",
+    "N3",
+    "S"
+  ],
+  "avarohanam": [
+    "S",
+    "N3",
+    "D2",
+    "P",
+    "M1",
+    "G2",
+    "R2",
+    "S"
+  ],
   "metadata": {
     "created_on": "2025-04-20 22:02:38",
     "created_by": "sbeas",
@@ -20,22 +38,15 @@
     "graha_swara": "",
     "amsa_swara": "",
     "varjya_swaras": [
-      "S",
       "R1",
-      "R2",
       "R3",
       "G1",
-      "G2",
       "G3",
-      "M1",
       "M2",
-      "P",
       "D1",
-      "D2",
       "D3",
       "N1",
-      "N2",
-      "N3"
+      "N2"
     ],
     "vakra_swaras": []
   },
@@ -43,9 +54,9 @@
     "time_of_day": "",
     "rasa": "",
     "type": "krama",
-    "arohana_type": "",
-    "avarohana_type": "",
-    "swara_count": 1
+    "arohana_type": "sampurna",
+    "avarohana_type": "sampurna",
+    "swara_count": 7
   },
   "melakartha": {
     "parent_name": "gourimanohari",

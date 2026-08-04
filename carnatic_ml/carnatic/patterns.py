@@ -230,6 +230,7 @@ def get_gamaka_for_swara(raga_name: str, swara: str, context: str = "plain") -> 
             "N2": GamakaType.KAMPITA,
         },
         "kalyani": {
+            "M2": GamakaType.KAMPITA,   # prati madhyama — jeeva swara, emphasised
             "G3": GamakaType.KAMPITA,
             "N3": GamakaType.KAMPITA,
             "R2": GamakaType.NOKKU,
@@ -266,12 +267,30 @@ def get_gamaka_for_swara(raga_name: str, swara: str, context: str = "plain") -> 
 def get_raga_prayogams(raga_name: str) -> List[List[str]]:
     """Get characteristic phrases for a raga."""
     raga_name = raga_name.lower()
-    
+
     if raga_name in RAGA_PRAYOGAMS:
         return RAGA_PRAYOGAMS[raga_name]
-    
+
     # Return empty list if no prayogams defined
     return []
+
+
+# Jeeva (life) swaras — the notes a raga dwells on and ornaments most.
+# Emphasising these (longer dwell + gamaka) is what gives a raga its identity.
+JIVA_SWARAS: Dict[str, set] = {
+    "kalyani": {"M2", "G3", "D2"},          # prati madhyama (M2) is central
+    "todi": {"G2", "D1", "N2"},
+    "bhairavi": {"G2", "D1"},
+    "shankarabharanam": {"G3", "D2", "N3"},
+    "sankarabharanam": {"G3", "D2", "N3"},
+    "mohanam": {"G3", "D2"},
+    "kambhoji": {"G3", "D2", "N2"},
+}
+
+
+def get_jiva_swaras(raga_name: str) -> set:
+    """Return the set of jeeva swaras to emphasise for a raga (may be empty)."""
+    return JIVA_SWARAS.get(raga_name.lower(), set())
 
 
 def create_phrase_with_gamakas(

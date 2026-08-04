@@ -1,0 +1,277 @@
+{
+  "name": "songs_library",
+  "description": "Excerpts from shared/samples/Songs/ - real concert recordings with raga from filenames",
+  "created": "2026-06-17",
+  "recordings": [
+    {
+      "id": "songs_01-mayamalavagowla-alapana-ssi-c11",
+      "path": "shared\\samples\\Songs\\01-mayamalavagowla-alapana-ssi-c11.mp3",
+      "raga": "mayamalavagowla",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01-mayamalavagowla-alapana-ssi-c11.mp3"
+    },
+    {
+      "id": "songs_01a-chakravakam-alapana-ssi-c05",
+      "path": "shared\\samples\\Songs\\01a-chakravakam-alapana-ssi-c05.mp3",
+      "raga": "chakravakam",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01a-chakravakam-alapana-ssi-c05.mp3"
+    },
+    {
+      "id": "songs_01a-mayamalavagowla-alapana-ssi-c11",
+      "path": "shared\\samples\\Songs\\01a-mayamalavagowla-alapana-ssi-c11.mp3",
+      "raga": "mayamalavagowla",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01a-mayamalavagowla-alapana-ssi-c11.mp3"
+    },
+    {
+      "id": "songs_01a-SSI-rtp-kedaragaula-alapana",
+      "path": "shared\\samples\\Songs\\01a-SSI-rtp-kedaragaula-alapana.mp3",
+      "raga": "kedaragaula",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01a-SSI-rtp-kedaragaula-alapana.mp3"
+    },
+    {
+      "id": "songs_01a-surutti-alapana-ssi-air",
+      "path": "shared\\samples\\Songs\\01a-surutti-alapana-ssi-air.mp3",
+      "raga": "surutti",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01a-surutti-alapana-ssi-air.mp3"
+    },
+    {
+      "id": "songs_01a-varnam-begada-alapana-voleti-c01",
+      "path": "shared\\samples\\Songs\\01a-varnam-begada-alapana-voleti-c01.mp3",
+      "raga": "begada",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01a-varnam-begada-alapana-voleti-c01.mp3"
+    },
+    {
+      "id": "songs_01b-gajananayutham-chakravakam-swarakalpana-ssi-c12",
+      "path": "shared\\samples\\Songs\\01b-gajananayutham-chakravakam-swarakalpana-ssi-c12.mp3",
+      "raga": "chakravakam",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-gajananayutham-chakravakam-swarakalpana-ssi-c12.mp3"
+    },
+    {
+      "id": "songs_01b-janakiramana-suddhaseemanthini-swarakalpana-ssi-c06",
+      "path": "shared\\samples\\Songs\\01b-janakiramana-suddhaseemanthini-swarakalpana-ssi-c06.mp3",
+      "raga": "suddhaseemanthini",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-janakiramana-suddhaseemanthini-swarakalpana-ssi-c06.mp3"
+    },
+    {
+      "id": "songs_01b-maakelara-ravichandrika-swarakalpana-gnb-nanja",
+      "path": "shared\\samples\\Songs\\01b-maakelara-ravichandrika-swarakalpana-gnb-nanja.mp3",
+      "raga": "ravichandrika",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-maakelara-ravichandrika-swarakalpana-gnb-nanja.mp3"
+    },
+    {
+      "id": "songs_01b-pahimaam-janaranjani-swarakalpana-ssi-c15",
+      "path": "shared\\samples\\Songs\\01b-pahimaam-janaranjani-swarakalpana-ssi-c15.mp3",
+      "raga": "janaranjani",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-pahimaam-janaranjani-swarakalpana-ssi-c15.mp3"
+    },
+    {
+      "id": "songs_01b-ramaneepai-kedaram-swarakalpana-alathur-c01",
+      "path": "shared\\samples\\Songs\\01b-ramaneepai-kedaram-swarakalpana-alathur-c01.mp3",
+      "raga": "kedaram",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-ramaneepai-kedaram-swarakalpana-alathur-c01.mp3"
+    },
+    {
+      "id": "songs_01b-SSI-rtp-kedaragaula-tanam",
+      "path": "shared\\samples\\Songs\\01b-SSI-rtp-kedaragaula-tanam.mp3",
+      "raga": "kedaragaula",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-SSI-rtp-kedaragaula-tanam.mp3"
+    },
+    {
+      "id": "songs_01b-sundara-anandabhairavi-swarakalpana-ssi-TIsai1960",
+      "path": "shared\\samples\\Songs\\01b-sundara-anandabhairavi-swarakalpana-ssi-TIsai1960.mp3",
+      "raga": "anandabhairavi",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-sundara-anandabhairavi-swarakalpana-ssi-TIsai1960.mp3"
+    },
+    {
+      "id": "songs_01b-surutti-varnam-swarakalpana-ssi-c18",
+      "path": "shared\\samples\\Songs\\01b-surutti-varnam-swarakalpana-ssi-c18.mp3",
+      "raga": "surutti",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-surutti-varnam-swarakalpana-ssi-c18.mp3"
+    },
+    {
+      "id": "songs_01b-varnam-kalyani-ata-swarakalpana-mdr-c06",
+      "path": "shared\\samples\\Songs\\01b-varnam-kalyani-ata-swarakalpana-mdr-c06.mp3",
+      "raga": "ata",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-varnam-kalyani-ata-swarakalpana-mdr-c06.mp3"
+    },
+    {
+      "id": "songs_01b-vatapi-hamsadhwani-swarakalpana-gnb-c01",
+      "path": "shared\\samples\\Songs\\01b-vatapi-hamsadhwani-swarakalpana-gnb-c01.mp3",
+      "raga": "hamsadhwani",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-vatapi-hamsadhwani-swarakalpana-gnb-c01.mp3"
+    },
+    {
+      "id": "songs_01b-vatapi-hamsadhwani-swarakalpana-gnb-c02",
+      "path": "shared\\samples\\Songs\\01b-vatapi-hamsadhwani-swarakalpana-gnb-c02.mp3",
+      "raga": "hamsadhwani",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01b-vatapi-hamsadhwani-swarakalpana-gnb-c02.mp3"
+    },
+    {
+      "id": "songs_01c-varnam-begada-swarakalpana-voleti-c01",
+      "path": "shared\\samples\\Songs\\01c-varnam-begada-swarakalpana-voleti-c01.mp3",
+      "raga": "begada",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 01c-varnam-begada-swarakalpana-voleti-c01.mp3"
+    },
+    {
+      "id": "songs_02a-endukunirdaya-harikambodhi-alapana-alathur-c01",
+      "path": "shared\\samples\\Songs\\02a-endukunirdaya-harikambodhi-alapana-alathur-c01.mp3",
+      "raga": "harikambhoji",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02a-endukunirdaya-harikambodhi-alapana-alathur-c01.mp3"
+    },
+    {
+      "id": "songs_02a-kedaram-alapana-mdr-c02",
+      "path": "shared\\samples\\Songs\\02a-kedaram-alapana-mdr-c02.mp3",
+      "raga": "kedaram",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02a-kedaram-alapana-mdr-c02.mp3"
+    },
+    {
+      "id": "songs_02a-panthuvarali-alapana-gnb-c01",
+      "path": "shared\\samples\\Songs\\02a-panthuvarali-alapana-gnb-c01.mp3",
+      "raga": "panthuvarali",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02a-panthuvarali-alapana-gnb-c01.mp3"
+    },
+    {
+      "id": "songs_02a-purvikalyani-alapana-ssi-tisai1960",
+      "path": "shared\\samples\\Songs\\02a-purvikalyani-alapana-ssi-tisai1960.mp3",
+      "raga": "purvikalyani",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02a-purvikalyani-alapana-ssi-tisai1960.mp3"
+    },
+    {
+      "id": "songs_02a-sriranjani-alapana-mdr-c05",
+      "path": "shared\\samples\\Songs\\02a-sriranjani-alapana-mdr-c05.mp3",
+      "raga": "sriranjani",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02a-sriranjani-alapana-mdr-c05.mp3"
+    },
+    {
+      "id": "songs_02b-brochevarevare-sriranjani-swarakalpana-ssi-c18",
+      "path": "shared\\samples\\Songs\\02b-brochevarevare-sriranjani-swarakalpana-ssi-c18.mp3",
+      "raga": "sriranjani",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-brochevarevare-sriranjani-swarakalpana-ssi-c18.mp3"
+    },
+    {
+      "id": "songs_02b-dinamanivamsha-harikambodhi-swarakalpana-ssi-c01",
+      "path": "shared\\samples\\Songs\\02b-dinamanivamsha-harikambodhi-swarakalpana-ssi-c01.mp3",
+      "raga": "harikambhoji",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-dinamanivamsha-harikambodhi-swarakalpana-ssi-c01.mp3"
+    },
+    {
+      "id": "songs_02b-guruleka-gowrimanohari-neraval-ssi-c10",
+      "path": "shared\\samples\\Songs\\02b-guruleka-gowrimanohari-neraval-ssi-c10.mp3",
+      "raga": "gowrimanohari",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-guruleka-gowrimanohari-neraval-ssi-c10.mp3"
+    },
+    {
+      "id": "songs_02b-guruleka-gowrimanohari-swarakalpana-ssi-c02",
+      "path": "shared\\samples\\Songs\\02b-guruleka-gowrimanohari-swarakalpana-ssi-c02.mp3",
+      "raga": "gowrimanohari",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-guruleka-gowrimanohari-swarakalpana-ssi-c02.mp3"
+    },
+    {
+      "id": "songs_02b-manasayetu-malayamarutham-neraval-gnb-c02",
+      "path": "shared\\samples\\Songs\\02b-manasayetu-malayamarutham-neraval-gnb-c02.mp3",
+      "raga": "malayamarutham",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-manasayetu-malayamarutham-neraval-gnb-c02.mp3"
+    },
+    {
+      "id": "songs_02b-marivere-anandabhairavi-swarakalpana-ssi-c05",
+      "path": "shared\\samples\\Songs\\02b-marivere-anandabhairavi-swarakalpana-ssi-c05.mp3",
+      "raga": "anandabhairavi",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-marivere-anandabhairavi-swarakalpana-ssi-c05.mp3"
+    },
+    {
+      "id": "songs_02b-neebhajana-nayaki-swarakalpana-ssi-c11",
+      "path": "shared\\samples\\Songs\\02b-neebhajana-nayaki-swarakalpana-ssi-c11.mp3",
+      "raga": "nayaki",
+      "raga_aliases": [],
+      "tonic_hz": null,
+      "source": "songs_library",
+      "notes": "From filename: 02b-neebhajana-nayaki-swarakalpana-ssi-c11.mp3"
+    }
+  ]
+}
