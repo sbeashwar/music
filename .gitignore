@@ -29,6 +29,23 @@ runs/
 recording/
 carnatic_ml/Sample_Tracks/
 
+# Audio and MIDI are local/generated unless they are part of the curated corpus.
+*.mp3
+*.wav
+*.flac
+*.m4a
+*.ogg
+*.aac
+*.mid
+*.midi
+!carnatic_ml/shared/samples/**/*.mp3
+!carnatic_ml/shared/samples/**/*.wav
+!carnatic_ml/shared/samples/**/*.flac
+!carnatic_ml/shared/samples/**/*.m4a
+!carnatic_ml/shared/samples/**/*.ogg
+!carnatic_ml/shared/samples/**/*.aac
+carnatic_ml/shared/samples/gen/
+
 # Editor and OS files
 .vscode/
 .idea/
